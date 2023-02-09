@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {\shortstack{Duración ensayo\\\\Si Endurance $t=t_{endurance}$\\Si Rolling$t=t_{rolling}$}};
+\node (pro3) [process, below of=start] {Transcurrir t};
+
+\end{tikzpicture}
+
+
+\end{document}

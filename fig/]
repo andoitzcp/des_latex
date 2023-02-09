@@ -1,0 +1,23 @@
+\documentclass[varwidth=\maxdimen]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{tabular}{ l c c c }
+	\toprule
+	Variable	& Tipo de vehiculo	& Distribución	& Constantes (min) \\
+	\midrule
+	Conducir largo	& A y B	& Gamma			& $k = 8$, $\theta = 3$ \\
+	Conducir corto	& A y B	& Triangular	& $min = 2$, $moda = 3$, $max = 4$ \\
+	Buscar parking	& A y B	& Gamma			& $k = 10$, $\theta = 1$ \\
+	Repostar		& A y B	& Triangular	& $min = 4$, $moda = 5$, $max = 8$ \\
+	Entre llegadas	& A*	& Exponencial	& $\lambda = 1$ \\
+					& B		& Exponencial	& $\lambda = 15$ \\
+	Estacionamiento	& A		& Normal		& $\mu = 560$, $\sigma = 60$ \\
+					& B		& Lognormal		& $\mu = 5$, $\sigma = 0.7$ \\
+	\bottomrule
+\end{tabular}
+
+\end{document}

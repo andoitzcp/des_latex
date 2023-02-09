@@ -1,0 +1,34 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {\shortstack{Duración acondicionamiento\\\\Si Endurance $t=t_{endurance}$\\Si Rolling$t=t_{rolling}$}};
+\node (pro1) [process, below of=start] {Requerir técnico};
+\node (pro2) [process, below of=pro1] {Liberar técnico};
+\node (pro3) [process, below of=pro2] {Transcurrir t};
+\node (dec) [decision, below of=pro3, aspect=2] {Fuera de oficina?};
+\node (pro4) [process, below of=dec] {Transcurrir t hasta incio de jornada};
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (dec);
+\draw [arrow] (dec) -- (pro4);
+
+\end{tikzpicture}
+
+
+\end{document}

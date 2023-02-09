@@ -1,0 +1,29 @@
+\documentclass[varwidth=\maxdimen]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{tabular}{ l c c }
+	\toprule
+	Proceso	& Prioridad	& Distribución (min) \\
+	\midrule
+	Tiempo entre llegadas	& -		& Exponencial (min) \\
+							&		& $\lambda=48$ \\
+							\\
+	Enllantado				& 0		& Triangular \\
+							&		& $a=12$, $m=15$, $b=20$ \\
+							\\
+	Acondicionamiento		& -2	& Constante \\
+							&		& $c=360$ \\
+							\\
+	Montaje					& -2	& Normal \\
+							&		& $\mu=45$, $\sigma=10$ \\
+							\\
+	Ensayo					& -		& Normal \\
+							&		& $\mu=180$, $\sigma=20$ \\
+	\bottomrule
+\end{tabular}
+
+\end{document}

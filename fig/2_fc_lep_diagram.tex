@@ -1,0 +1,86 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {LEP};
+\node (cli1) [process, above of=start, xshift=-5cm] {CP};
+\node (cli2) [process, above of=start] {IND};
+\node (cli3) [process, above of=start, xshift=5cm] {EXT};
+\node (pro_q1) [process, below of=start, xshift=-5cm] {ENDURANCE};
+\node (pro_r1) [process, below of=start] {ROLLING RESISTANCE};
+\node (pro_d1) [process, below of=start, xshift=5cm] {DIMENSIONAL};
+\node (pro_q2) [process, below of=pro_q1] {Enllantado};
+\node (pro_q3) [process, below of=pro_q2] {Montaje};
+\node (pro_q4) [process, below of=pro_q3] {Acondicionamiento};
+\node (pro_q5) [process, below of=pro_q4] {Test};
+\node (pro_q6) [process, below of=pro_q5] {Corte y pulido};
+\node (pro_r2) [process, below of=pro_r1] {Enllantado};
+\node (pro_r3) [process, below of=pro_r2] {Acondicionamiento};
+\node (pro_r4) [process, below of=pro_r3] {Montaje};
+\node (pro_r5) [process, below of=pro_r4] {Test};
+\node (dec_r1) [decision, below of=pro_r5] {IND?};
+\node (pro_r6) [process, below of=dec_r1] {Almacenar 2 semanas};
+\node (pro_r7) [process, below of=pro_r6] {Corte y pulido};
+\node (dec_d1) [decision, below of=pro_d1] {IND?};
+\node (pro_d2) [process, below of=dec_d1] {Huella y dimensiones};
+\node (pro_d3) [process, below of=pro_d2] {Corte y pulido};
+\node (endp) [startstop, right of=pro_d3, xshift=2cm] {IND TEAM};
+\node (pro_d4) [process, below of=pro_d3] {Analisis de secciones};
+\node (end) [startstop, below of=pro_r7] {REPORTE};
+
+\coordinate [below of=cli2, yshift=1cm] (ur1);
+\coordinate [below of=start, yshift=1cm] (ur2);
+\coordinate [right of=dec_r1, xshift=0.5cm] (ur3);
+\coordinate [left of=dec_d1, xshift=-0.5cm] (ur4);
+
+\draw [line] (cli1) |- (ur1);
+\draw [line] (cli2) -- (ur1);
+\draw [line] (cli3) |- (ur1);
+\draw [arrow] (ur1) -- (start);
+\draw [line] (start) -- (ur2);
+\draw [arrow] (ur2) -| (pro_q1);
+\draw [arrow] (ur2) -- (pro_r1);
+\draw [arrow] (ur2) -| (pro_d1);
+\draw [arrow] (pro_q1) -- (pro_q2);
+\draw [arrow] (pro_q2) -- (pro_q3);
+\draw [arrow] (pro_q3) -- (pro_q4);
+\draw [arrow] (pro_q4) -- (pro_q5);
+\draw [arrow] (pro_q5) -- (pro_q6);
+\draw [arrow] (pro_q6) |- (end);
+\draw [arrow] (pro_r1) -- (pro_r2);
+\draw [arrow] (pro_r2) -- (pro_r3);
+\draw [arrow] (pro_r3) -- (pro_r4);
+\draw [arrow] (pro_r4) -- (pro_r5);
+\draw [arrow] (pro_r5) -- (dec_r1);
+\draw [arrow] (dec_r1) -- node [near start] {Yes} (pro_r6);
+\draw [line] (dec_r1) -- node [near start] {No} (ur3);
+\draw [arrow] (ur3) |- (pro_r7);
+\draw [arrow] (pro_r6) -- (pro_r7);
+\draw [arrow] (pro_r7) -- (end);
+\draw [arrow] (pro_d1) -- (dec_d1);
+\draw [arrow] (dec_d1) -- node [near start] {No} (pro_d2);
+\draw [line] (dec_d1) -- node [near start] {Yes} (ur4);
+\draw [arrow] (pro_d2) -- (pro_d3);
+\draw [arrow] (ur4) |- (pro_d3);
+\draw [arrow] (pro_d3) -- (pro_d4);
+\draw [arrow] (pro_d3) -- (endp);
+\draw [arrow] (pro_d4) |- (end);
+
+
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,25 @@
+\documentclass[12pt]{article}
+\usepackage{mystyle}
+\title{A Modular Latex Template}
+\author{Eitan Lees}
+\date{Summer 2019}
+
+\begin{document}
+
+    \tableofcontents
+
+	\newpage
+    \input{tex/sec_intro}
+    \input{tex/sec_mteorico}
+    \input{tex/sec_desarrollo}
+    \input{tex/sec_resultados}
+    \input{tex/sec_conclusiones}
+
+	\newpage
+	\input{tex/apnd_code}
+
+	\newpage
+	\nocite{*}
+	\bibliographystyle{elsarticle-harv}
+	\bibliography{mybibliography}
+\end{document}

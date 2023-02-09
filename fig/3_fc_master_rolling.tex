@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {Proceso maestro Endurance};
+\node (pro1) [process, below of=start] {\shortstack{Extraer 1 objeto\\del buffer (a)}};
+\node (pro2) [process, below of=pro1] {Requerir llanta};
+\node (pro3) [process, below of=pro2] {\shortstack{Llamar a \\enllantado(a)}};
+\node (pro4) [process, below of=pro3] {\shortstack{Llamar a \\ancondiconamiento(a)}};
+\node (pro5) [process, below of=pro4] {Requerir maquina rolling};
+\node (pro6) [process, below of=pro5] {\shortstack{Llamar a \\montado(a)}};
+\node (pro7) [process, below of=pro6] {\shortstack{Llamar a \\ensayo Rolling(a)}};
+\node (pro8) [process, below of=pro7] {\shortstack{Liberar\\llanta y maquina}};
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (pro4);
+\draw [arrow] (pro4) -- (pro5);
+\draw [arrow] (pro5) -- (pro6);
+\draw [arrow] (pro6) -- (pro7);
+\draw [arrow] (pro7) -- (pro8);
+
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,49 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {Proceso maestro Endurance};
+\node (dec1) [decision, below of=start, aspect=2] {Lago de bufer > 1};
+\node (pro1) [process, below of=dec1] {\shortstack{Extraer 2 objetos\\del buffer (a, b)}};
+\node (pro2) [process, below of=pro1] {Requerir llanta};
+\node (pro3) [process, below of=pro2] {\shortstack{Llamar a \\enllantado(a, b)}};
+\node (pro4) [process, below of=pro3] {\shortstack{Llamar a \\enllantado(a, b)}};
+\node (pro5) [process, below of=pro4] {Requerir maquina endurance};
+\node (pro6) [process, below of=pro5] {Llamar a montado(a)};
+\node (pro7) [process, below of=pro6] {Llamar a montado(b)};
+\node (pro8) [process, below of=pro7] {\shortstack{Llamar a \\acondicionado(a, b)}};
+\node (pro9) [process, below of=pro8] {\shortstack{Llamar a \\medir presion(a, b)}};
+\node (pro10) [process, below of=pro9] {\shortstack{Llamar a \\Ensayo endurance\\(a, b)}};
+\node (pro11) [process, below of=pro10] {\shortstack{Liberar \\Llanta y maquina}};
+
+\draw [arrow] (dec1) -- (pro1);
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (pro4);
+\draw [arrow] (pro4) -- (pro5);
+\draw [arrow] (pro5) -- (pro6);
+\draw [arrow] (pro6) -- (pro7);
+\draw [arrow] (pro7) -- (pro8);
+\draw [arrow] (pro8) -- (pro9);
+\draw [arrow] (pro9) -- (pro10);
+\draw [arrow] (pro10) -- (pro11);
+
+
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, calc, automata, positioning, fit, quotes}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=white]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [thick]
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+	\node (start) [startstop] {\shortstack{Atributos \\ \\ ID=i, RUN=r, TEST=t}};
+\node (pro1) [process, below of=start] {i += 1};
+\node (pro2) [process, below of=pro1] {\shortstack{Crear \\ objeto(i, r, t)}};
+\node (pro3) [process, below of=pro2] {\shortstack{Añadir \\ objeto a buffer}};
+\node (pro4) [process, below of=pro3] {\shortstack{Llamar a \\ proceso maestro}};
+\node (pro5) [process, below of=pro4] {Transcurrir tiempo entre llegadas};
+
+\coordinate [left of=pro5, xshift=-1cm] (ur1);
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (pro4);
+\draw [arrow] (pro4) -- (pro5);
+\draw [arrow] (pro5) -- (ur1);
+\draw [arrow] (ur1) |- (pro1);
+
+
+\end{tikzpicture}
+
+
+\end{document}

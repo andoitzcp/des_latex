@@ -1,0 +1,705 @@
+% **************************************************************************** %
+%                                                                              %
+%                                                         :::      ::::::::    %
+%    sec_mteorico.tex                                   :+:      :+:    :+:    %
+%                                                     +:+ +:+         +:+      %
+%    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
+%                                                 +#+#+#+#+#+   +#+            %
+%    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
+%    Updated: 2023/02/09 09:35:20 by acampo-p         ###   ########.fr        %
+%                                                                              %
+% **************************************************************************** %
+
+\section{MARCO TEÓRICO}
+
+\subsection{SIMULACIÓN DE EVENTOS DISCRETOS}
+
+Con el avance tecnológico experimentado desde los inicios de la computación,
+nuevas maneras para afrontar la resolución de problemas han surgido,
+que un siglo antes, habrían sido descartadas por su falta de viabilidad.
+La capacidad de calculo y el diseño de inteligencias artificiales,
+a proporcionado las herramientas necesarias
+para solucionar aquellos problemas, que con métodos clásicos,
+definitivamente demasiado complejos para modelar.
+La simulación, hoy en día, es una de las tres metodologías consolidadas,
+en el ámbito científico e ingenieril,
+para la resolución de problemas \citep{banks1998handbook}.
+Siendo esta metodología descrita como ``la técnica del ultimo recurso'',
+por el autor \citep{garzia1986discrete},
+debido a la intensa demanda computacional
+que requería en el momento de su publicación,
+el transcurso de los años ha mermado esta desventaja.
+
+Diversos autores describen la simulación de la siguiente manera
+
+\begin{itemize}
+	\item ``Una simulación es
+	el establecimiento de un modelo lógico-matemático de un sistema
+	y la manipulación experimental de este en una computadora digital
+	\citep{pritsker1974gasp}''.   
+	\item ``La simulación es el proceso de diseñar
+		el modelo de un sistema real y realizar experimentos
+		con este modelo con el propósito de,
+		o bien,
+		entender el comportamiento del sistema,
+		o evaluar distintas estrategias
+		(dentro de los limites impuestos por un criterio
+		o conjunto de criterios)
+		para la operación del sistema'' \citep{shannon1976systems}.
+	\item ``Una simulación es la imitación de el modo de operación
+		de un proceso real o sistema durante el transcurso del tiempo''
+		\citep{banks1999introduction}.
+\end{itemize}
+
+Como se puede observar, el modelo,
+es un termino recurrente en el ámbito de la simulación.
+Banks sostiene que el modelo es la representación del sistema simulado
+\citep{banks1998handbook}.
+El autor matiza que la virtud de un modelo radica en su complejidad,
+siendo necesario el balance entre una representación ajustada,
+sin complicar en exceso el modelo.
+Por tanto, aquellos factores que no influyan lo suficiente
+en los resultados de la simulación, deberían ser eliminados,
+ya que únicamente extienden el proceso de desarrollo.
+
+El modelo, por tanto, constituye la base de la simulación,
+define las variables, y criterios para las decisiones tomadas en la simulación.
+Banks señala, la distinción entre un modelo matemático convencional
+y el modelo de una simulación \citep{banks1998handbook}.
+Los modelos matemáticos y estadísticos
+suelen representar las variables de manera explicita,
+relacionando variables independientes y variables dependientes
+para obtener un resultado.
+En el caso de una DES, el modelo utilizado se enfoca en
+la representación de sus componentes internos y sus interacciones..
+
+El funcionamiento de la DES, se basa en registrar los cambios
+que van ocurriendo en el estado del sistema durante el transcurso del tiempo.
+En el intervalo entre alternaciones de estado,
+ocurren el concepto de eventos, propios de esta rama de simulación.
+Varga \citep{varga2001discrete} describe estos eventos como instantáneos,
+siendo la duración de los mismos nula.
+Durante el evento no ocurre nada especial,
+salvo la alteración del estado del sistema.
+Una sencilla representación de este concepto
+puede ser observada el la Figura~\ref{fig:2_fc_simple_ex},
+donde el sistema representado es un coche.
+El coche posee 3 estados, los cuales se van sucediendo,
+durante el transcurso del tiempo.
+
+\begin{figure}[h]
+	\begin{center}
+		\includestandalone{fig/2_fc_simple_ex}
+	\end{center}
+	\caption{Representación del cambio de estado en una DES,
+	los rectángulos representan el estado del sistema,
+	mientras que las flechas indican el suceso de un evento instantáneo.}
+	\label{fig:2_fc_simple_ex}
+\end{figure}
+
+\subsubsection{Terminología y funcionamiento de una DES}\label{TF_DES}
+
+Para describir detalladamente este tipo de simulaciones,
+es necesario definir previamente algunos conceptos.
+Los siguientes conceptos
+son la síntesis de la información redactada por \citep{banks1998handbook}
+aplicados en el entorno de Python y su librería Simpy.
+
+\paragraph{Las variables del estado}
+del sistema proporcionan información
+acerca de el comportamiento de los procesos
+que se llevan a cabo durante la simulación.
+Determina las variables de estado que el programa debe retornar
+depende de el objetivo del proyecto.
+El programa deberá ser diseñado entorno a ellas,
+puesto que,serán usadas
+para el posterior calculo de indicadores del rendimiento.
+Un ejemplo, es el momento de inicio y fin de un subproceso.
+
+\paragraph{Las entidades}
+son los objetos representados por el modelo.
+Se distinguen dos tipos de entidades,
+las dinámicas y las estáticas.
+Las primeras, avanzan en el sistema
+a través de los procesos simulados, 
+mientras que las segundas, dan servicio a las primeras
+permaneciendo ocupadas en el proceso.
+Considerando una gasolinera como sistema,
+la entidad dinámica seria un coche repostando combustible,
+mientras que la estática, seria la estación de repostaje.
+Estos objetos pueden poseer atributos,
+como el consumo de combustible o el tamaño de su deposito.
+Dependiendo de el objetivo de la simulación,
+algunos atributos serán relevantes en diseño del modelo.
+
+\paragraph{Un recurso}
+es una entidad
+que provee de servicio a una entidad dinámica.
+Los recursos pueden servir a múltiples entidades simultáneamente.
+De manera similar, una entidad puede
+solicitar varios tipos de recursos en distintas cantidades.
+Si la demanda de una entidad no se satisface,
+esta entrara en una cola,
+a la espera de la liberación del recurso.
+Cuando la entidad tome el recurso,
+lo mantendrá ocupado durante la duración del proceso.
+Los recursos pueden tener varios estados,
+como disponible, ocupado, averiado, en mantenimiento\ldots
+
+\paragraph{Una actividad}
+es un periodo de tiempo,
+el cual es conocido previo a su inicio.
+Su duración puede ser determinada de varias maneras;
+mediante una constante, una distribución estadística,
+el resultado de una ecuación, un archivo o una decisión lógica.
+El conocimiento de su duración,
+supone saber cuando un recurso sera liberado,
+lo que facilita el trabajo de computación.
+
+\paragraph{Una demora}
+es un periodo de espera indefinido
+antes del comienzo de una actividad.
+Este depende de la ejecución
+de el resto de actividades prioritarias,
+por lo que el final de la espera no se puede determinar
+mientras el recurso siga ocupado.
+
+\paragraph{Un evento}
+ocurre al principio y al final de una actividad o demora.
+Marcan la transición de el sistema de un estado a otro.
+
+Considerando todos estos conceptos,
+las entidades del sistema compiten entre ellas por el uso de los recursos,
+si estos no se encuentran disponibles, quedan a la espera de poder solicitarlos.
+Tanto las actividades como las demoras reclaman estas entidades
+durante los intervalos entre eventos,
+siendo liberadas para el siguiente proceso una vez finalizado el periodo.
+Una DES, puede describirse como el avance de una entidad o conjunto de entidades
+a través  de las actividades que modelan el proceso real.
+Este avance es accionado
+mediante el transcurso de tiempo virtual dentro de la simulación.
+
+\subsubsection{Exposición de un caso ficticio usando una DES}\label{example_descrp}
+
+Con el objetivo de ilustrar los conceptos descritos en la sección~\ref{TF_DES}
+y demostrar la capacidad de resolución de problemas de la DES,
+se ha procedido a emular un caso práctico.
+
+Supóngase que un ayuntamiento ficticio desea disminuir
+los problemas causados por el congestionamiento del trafico en la ciudad.
+El ayuntamiento solicita a una consultoría ingenieril
+desarrollar un proyecto para observar el
+desempeño de las distintas soluciones planteadas.
+La consultoría ve apropiado usar una DES para valorar
+el impacto de las distintas propuestas
+y proponer un plan de acción optimo a la entidad contratante.
+
+Entre los objetivos del contratista se encuentra el objetivo principal de
+minimizar la cantidad de vehículos que circulan por la ciudad.
+Una de las causas de congestión apunta a una estación de repostaje
+con unos precios particularmente competitivos
+que causa complicaciones a la entrada de la ciudad.
+Se cree que su capacidad de abastecimiento
+no es suficiente durante los picos de alta actividad.
+Por otra parte, la ciudad es un potente centro de actividad comercial.
+Muchos empleados se desplazan a diario en coche,
+lo que sumado a los espacios limitados de estacionamiento,
+y la alta densidad poblacional,
+hace sospechar que los conductores se demoran en exceso a la hora de buscar parking.
+Se teme que este tiempo adicional,
+sea un factor considerable en las emisiones totales de los vehículos.
+
+Con las siguientes dos medidas se espera obtener
+una reducción del congestionamiento del trafico en la ciudad.
+
+\begin{itemize}
+	\item Primeramente, negociar un ampliamiento
+		del servicio de distribución de combustibles
+		con la empresa propietaria de la estación de repostaje.
+	\item Paralelamente, ampliar la capacidad de un parking publico gratuito
+		ubicado cerca del núcleo de actividad laboral.
+\end{itemize}
+
+La simulación planteada, tratara de emular el comportamiento de los vehículos
+que circulan por la ciudad durante el transcurso de una jornada laboral normal.
+Es por ello que el comienzo de la simulación se estima entorno a las 7:00 a.m.
+y se prologa hasta 9:00 p.m.
+El modelo producirá 2 tipos de entidades,
+el vehículo de tipo `A', que sera el medio de transporte para los trabajadores de la zona,
+y el de tipo `B' que englobará todo tipo de usuarios ajenos a el ámbito laboral.
+Esta distinción se ha considerado necesaria,
+debido a la uniformidad que representa el primer grupo, respecto al segundo, algo más caótico.
+Los vehículos generados seguirán la rutina descrita el la Figura~\ref{fig:2_fc_complex_ex}.
+
+\begin{figure}
+	\begin{center}
+		\includestandalone{fig/2_fc_complex_ex}
+	\end{center}
+	\caption{Modelo del caso practico descrito en el apartado~\ref{example_descrp}}
+		\label{fig:2_fc_complex_ex}
+\end{figure}
+
+La consultoría, por una parte, establece
+las propiedades generales de su modelo en la Tabla~\ref{tab:2_tbl_spec01_ex}.
+Mientras que, por otra parte, decide recopilar información clave
+para el desarrollo del modelo de simulación.
+A raíz de un análisis obtiene los datos mostrados en la Tabla~\ref{tab:2_tbl_spec02_ex}.
+
+\begin{table}
+	\centering
+	\caption{Especificaciones generales.}
+	\input{fig/2_tbl_spec01_ex}
+	\label{tab:2_tbl_spec01_ex}
+\end{table}
+	
+\begin{table}
+	\centering
+	\caption{Propiedades de las distribuciones observadas en las procesos reales.}
+	\input{fig/2_tbl_spec02_ex}
+	\footnotesize{*La generación de entidades tipo `A' únicamente se prolonga desde el comienzo de la simulación hasta el minuto X.
+	Así, se obtiene una aproximación, a el horario típico de un día laboral.}
+	\label{tab:2_tbl_spec02_ex}
+\end{table}
+
+Una vez finalizado el proceso de diseño de la simulación,
+la consultoría posee el código fuente expuesto en la
+Sección~\ref{apnd1} del Anexo I.
+Este programa, devuelve la Tabla,
+la cual contiene datos acerca del inicio y final de cada proceso.
+Con el correcto tratamiento de datos recibidos,
+se obtienen los siguientes resultados.
+
+Como puede observarse en la Figura~\ref{fig:2_fig_example_01},
+la adición de 2 estaciones de combustible
+evita el colapso de la gasolinera en intervalos críticos.
+En el gráfico situado a la izquierda,
+el pico de actividad azul entorno al minuto 150 de la ejecución de la simulación,
+se ve drásticamente reducido, mientras que el repunte secundario es completamente eliminado.
+A su vez, en el gráfico adyacente,
+La desviación estándar de tiempos de espera queda reducida
+y su media queda desplazada hacia el eje.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{fig/2_fig_example_01}
+	\end{center}
+	\caption{Izquierda: Evolución de los vehículos a la espera de repostar para distintos escenarios. Derecha: Distribución de los tiempos de espera de repostaje para los distintos escenarios}
+	\label{fig:2_fig_example_01}
+\end{figure}
+
+Continuando con el análisis, el la Figura~\ref{fig:2_fig_example_02},
+El efecto de incrementar en un 50\% las plazas de parking disponible,
+no es apreciable en el gráfico expuesto arriba.
+La cantidad de vehículos en carretera permanece similar,
+mientras que en el gráfico inferior los vehículos saturan el parking hasta su nuevo limite.
+Al no haber una clara correlación entre ambos indicadores,
+se ilustra la representación de la distribución de tiempos de conducción
+en la Figura~\ref{fig:2_fig_example_03}.
+En esta exposición, puede llegar a apreciarse una ligera diferencia en los tiempos de conducción,
+aunque un test de hipótesis sería necesario
+para determinar si estas diferencias son estadísticamente significativas.
+
+En conclusión, los resultados muestran una clara ruta de inversión
+a la hora de ampliar la estación de combustibles,
+mientras que la expansión de el parking parece irrelevante.
+Esto demuestra la capacidad de recopilación de datos que ofrece una DES.
+Simultáneamente subraya la importancia del tratamiento de los datos obtenidos,
+y el uso de pruebas estadísticas, para la obtención de conclusiones certeras.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{fig/2_fig_example_02}
+	\end{center}
+	\caption{Evolución de la cantidad de vehículos a lo largo de la simulación, en distintos escenarios. Arriba: Vehículos en circulación. Abajo: Vehículos estacionados.}
+	\label{fig:2_fig_example_02}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{fig/2_fig_example_03}
+	\end{center}
+	\caption{Distribución de el tiempo de conducción para distintos escenarios. Izquierda: Tiempo total en circulación. Derecha: Tiempo circulando dentro de la ciudad.}
+	\label{fig:2_fig_example_03}
+\end{figure}
+
+\subsubsection{Etapas de desarrollo de una DES}
+
+Para que un proyecto tan complejo como una DES prospere, es fundamental estructurarlo.
+El diagrama expuesto en la Figura~\ref{fig:2_fc_sim_cookbook} publicado por \citep{banks1998handbook}
+define las etapas que deberían seguir este tipo de proyectos.
+Al ser este proyecto un simple Trabajo de Fin de Grado,
+este esquema servirá como orientación, más que como plano para la construcción de la simulación.
+Por ejemplo, la recopilación de datos ha resultado imposible en el momento de redacción del trabajo,
+pero se espera desarrollar el proyecto
+a partir de las más ajustadas distribuciones de probabilidad supuestas para el desarrollo del modelo.
+Se espera que este trabajo asiente una base,
+y que las imperfecciones actuales puedan ser corregidas en el futuro.
+
+\begin{figure}
+	\begin{center}
+		\includestandalone{fig/2_fc_sim_cookbook}
+	\end{center}
+	\caption{Esquema del proceso de desarrollo de una DES.}
+	\label{fig:2_fc_sim_cookbook}
+\end{figure}
+
+\paragraph{Formulación del problema, establecimiento de objetivos, y plan general.}
+
+Cada DES comienza con la declaración del problema que se tratará de solucionar.
+Esta etapa es crucial debido a que el resto de el trabajo se asentara sobre esta base.
+Se debe asegurar que el problema que se esta formulando sea el correcto,
+la comunicación entre el cliente y el equipo desarrollador debe ser optima.
+Una descripción precisa y un conocimiento extenso del sistema son necesarios para evitar
+trabajar en solucionar el problema equivocado.
+Es por ello que debe haber comunicación y feedback constante entre cliente y equipo.
+
+En el caso de este trabajo, algo similar sucede.
+Al ser un único autor, la comunicación no sera un factor importante,
+pero esto conllevara otras complicaciones.
+El conocimiento de el autor debe ser extenso en cada ámbito,
+debe comprender profundamente el sistema a modelar, y a su vez,
+dominar el uso de las herramientas de simulación.
+Manejar ambas, requerirá recordar la formulación del problema inicial
+más frecuentemente para no desviarse de la dirección.
+
+Respecto a los objetivos, estos deben ayudar a asentar la dirección de trabajo actuando como plan general.
+El establecimiento de varios objetivos alcanzables, cohesivos y correctamente secuenciados,
+guiará el proceso de desarrollo.
+Esto objetivos quedan listados en la sección~\ref{sec_obj}.
+
+\paragraph{Conceptualización del modelo.}
+
+El sistema propuesto sugiere conceptualizar el modelo en orden inverso,
+es decir, comenzar identificando los objetivos del proyecto,
+tal y como se ve en la Figura~\ref{fig:2_fc_model_concept}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includestandalone{fig/2_fc_model_concept}
+	\end{center}
+	\caption{Diagrama de pasos a seguir en la conceptualización de un modelo.}
+	\label{fig:2_fc_model_concept}
+\end{figure}
+
+El siguiente paso es hallar las preguntas clave a las que
+se les quiere dar respuesta.
+Generar una lista, y ordenar las preguntas respecto a su relevancia es lo ideal.
+Ademas, cuantificar los beneficios asociados a estas, aclara su jerarquía.
+
+Después, se debe determinar que outputs son necesarios
+para contestar a las preguntas previamente formuladas.
+Introduciendo en la simulación únicamente la complejidad necesaria,
+agilizará el proceso de desarrollo y mantendrá el enfoque original.
+
+Continuando con el alcance de la simulación,
+se deben detallar los procesos críticos en el calculo del output,
+descartando o simplificando aquellos que no tengan gran impacto en la salida.
+Por ejemplo, modelar recursos abundantes en la simulación,
+no tendrá impacto en el output,
+mientras que conocer los tiempos de espera de un proceso si lo hará.
+
+Se Finaliza, especificando las variables independientes
+que se introducirán al sistema.
+Estas variables tienen que ser de alta calidad, ya que,
+de lo contrario su introducción puede perjudicar al sistema al completo.
+Un ejemplo seria el de distinguir entre distintas distribuciones
+para entidades con atributos pobremente caracterizados.
+
+\paragraph{Recopilación de datos.}
+
+Cualquier DES requiere datos. La recopilación de la información del sistema,
+o la estimación en caso de ser un sistema ficticio, es una necesidad.
+
+En este trabajo, al no disponer de datos reales, se obviara el proceso de recopilación.
+El enfoque se situara en la correcta elección de las distribuciones, recopiladas en la sección~\ref{sec_prob_dist}, para representar el sistema ficticio a modelar.
+
+\paragraph{Traducción del modelo.}
+
+El modelo de simulación se construye a partir de la información desarrollada en el anterior punto.
+Este proceso consiste en traducir de manera eficaz el esqueleto previamente desarrollado,
+a un lenguaje que el ordenador pueda procesar.
+Para ello el libro sugiere lo siguiente:
+
+\begin{itemize}
+	\item Enfoque en el problema. El proyecto no debería limitarse a desarrollar el modelo,
+		si no que debería tratar de invertir aproximadamente el mismo tiempo
+		en la exploración del sistema y la solución de problemas.
+	\item Comienzo simple. El comienzo del proyecto debe ser simple,
+		adquiriendo complejidad hasta alcanzar el detalle necesario.
+	\item Manejo de la inteligencia del modelo.
+		El modelo desarrollado puede desarrollar ventajas respecto a su contrapartida real,
+		como conocer la ubicación exacta de una pieza instantáneamente.
+		Los humanos que gestionan el proceso difícilmente van a poder lograr este control,
+		y supondrá una característica inalcanzable en el sistema real.
+	\item Revisión. Revisar el funcionamiento del proyecto frecuentemente.
+		Esto evitara desvíos respecto al objetivo principal
+		y facilitara el proceso de verificación y validación.
+\end{itemize}
+\paragraph{Verificación y validación.}
+
+Comprobar el correcto funcionamiento de el proyecto desarrollado es fundamental.
+Esta es la labor de la verificación y validación (VV).
+El autor sugiere que este paso se realice
+frecuentemente a lo largo de el proceso de desarrollo.
+Esto evita complicaciones una vez el proyecto se vuelve demasiado extenso y demasiado complejo.
+Realizar la VV en cada pieza funcional de el modelo
+cada vez que suceda algún cambio es lo recomendable.
+
+Por una parte, la verificación es el proceso encargado de
+comprobar que la simulación se ejecute de la manera esperada.
+En este proceso se intentará hallar bugs en el programa.
+Esto se logra comprobando que la ejecución de cada paso
+en la simulación sea la correcta y dé los resultados esperados.
+
+Por otra parte, la validación consiste en comparar,
+el comportamiento del modelo respecto a el comportamiento real del sistema.
+En el caso de poseer datos sobre el sistema simulado,
+el libro sugiere utilizar herramientas estadísticas como, el test Student t o
+análisis de regresión donde el ajuste a la realidad sera comprobado.
+En el caso de no poseer los datos del sistema, como es este, se optara por un enfoque cualitativo.
+Aunque no haya datos, el comportamiento de un sistema
+puede predecirse cualitativamente, al cambiar ciertas variables.
+Por ejemplo en un tanque de agua cilíndrico,
+aunque el volumen del tanque y el caudal de entrada del agua sea desconocido,
+el nivel del agua disminuirá si el flujo neto es negativo.
+Si el programa, ejecutado obtiene el resultado contrario,
+este sera invalidado comenzando la revisión del mismo.
+
+\paragraph{Análisis.}
+
+Mediante el análisis del output obtenido de la simulación,
+se obtienen las conclusiones a las preguntas plateadas al inicio del proyecto.
+Primeramente, se deberán plantear los distintos escenarios que serán simulados.
+Estos escenarios serán ejecutados en la simulación obteniendo su output.
+El correcto tratamiento de los datos, junto con una exposición significativa de ellos dará claridad a los resultados.
+No obstante, para obtener las conclusiones deseadas, deberán realizarse testes estadísticos a los resultados para certificarlos.
+En este proyecto, se aplicaran los test descritos en la sección~\ref{sec_test_est}.
+
+\paragraph{Documentación y reporte.}
+
+Con la intención de que este proyecto
+pueda ser continuado en el futuro por otra persona,
+la documentación se vuelve necesaria.
+El proyecto se considera documentado,
+por una parte, mediante este trabajo,
+y por la otra mediante un código fuente auto-explicativo,
+con abundantes comentarios, que se haya en el Anexo~\ref{apnd2}.
+
+\paragraph{Implementación.}
+
+La implementación de este proyecto queda fuera de su alcance, por lo que no se profundizará en este tema.
+
+\subsection{TEORÍA DE LA PROBABILIDAD Y DES}
+
+La probabilidad esta estrechamente relacionada con la DES.
+Todo el calculo realizado en una simulación tiene el objetivo de
+calcular el valor esperado o la media
+de las variables dependientes de un proceso que se esta intentando medir.
+Definir ciertos conceptos estadísticos se vuelve imprescindible
+para el correcto desarrollo de este tipo de proyecto.
+
+\subsubsection{Variables aleatorias o random}
+
+Según el autor \citep{meester2008natural},
+una variable random ($X$) se puede explicarse
+como un numero cuyo valor no es conocido en el momento de su planificación.
+Aunque el valor ultimo de esta variable sea desconocido,
+el rango de valores que pueden tomar estas variables viene determinado por una función.
+\subsubsection{Distribuciones de probabilidad}\label{sec_prob_dist}
+
+Una distribución de probabilidad es una función estadística
+que determina la probabilidad de que una variable random
+\citep{simon2002probability},
+obtenga todos los valores posibles que contiene la propia distribución.
+Las distribuciones comúnmente usadas
+en los modelos de una DES son las siguientes:
+
+\paragraph{Distribución uniforme.}
+\begin{equation}
+	P(x) = \frac{1}{b-a}
+\end{equation}
+
+\paragraph{Distribución normal.}
+\begin{equation}
+	P(x) = \frac{1}{\sqrt{2 \pi \sigma ^{2}}} e^{-\frac{(x-\mu)^{2}}{2\sigma ^{2}}}
+\end{equation}
+
+\paragraph{Distribución lognormal.}
+\begin{equation}
+	P(x) = \frac{1}{\sigma x \sqrt{2 \pi}} e^{-\frac{(ln(x)-\mu)^{2}}{2\sigma ^{2}}}
+\end{equation}
+
+\paragraph{Distribución triangular.}
+\begin{equation}
+	P(x;a,m,b) =
+	\begin{cases}
+		\frac{2(x-a)}{(b-a)(m-a)}	&\text{para $a\leq x\leq m$,} \\
+		\frac{2(b-x)}{(b-a)(b-m)}	&\text{para $a\leq x\leq m$,} \\
+		0							&\text{para el resto}
+	\end{cases}
+\end{equation}
+
+\paragraph{Distribución exponencial.}
+\begin{equation}
+	P(x; \lambda) =
+	\begin{cases}
+		\lambda e^{-\lambda x}	& x \geq 0, \\
+		0										& x < 0
+	\end{cases}
+\end{equation}
+
+\paragraph{Distribución gamma.}
+\begin{equation}
+	P(x) = x^{k-1} \frac{e^{-x/\theta}}{\theta ^{k}\Gamma (k)} &
+	\text{, siendo:} &
+	\Gamma (k) = (k-1)!
+\end{equation}
+
+\subsubsection{Tests de hipótesis}\label{sec_test_est}
+
+La comprobación de los resultados obtenidos en las DES,
+es una parte fundamental de la simulación.
+Para ello se suelen emplear los test de hipótesis como muestra de la validez
+de las conclusiones obtenidas.
+
+El test de hipótesis involucra formular, 2 o más hipótesis, que serán puestas a prueba mediante el empleo de tests estadísticos, a las muestras poblacionales obtenidas \citep{martin2022introduction}.
+
+Un formato común en el ámbito de test de hipótesis es el siguiente:
+
+\begin{itemize}
+	\item Hipótesis nula, $H_0$, trata de demostrar que el fenómeno observado es únicamente resultado del azar.
+	\item Hipótesis alternativa, $H_1$, trata de demostrar la hipótesis que se desea probar. Existen 3 tipos:
+		\begin{itemize}
+			\item parámetro de populación $>$ valor hipotetizado.
+			\item parámetro de populación $<$ valor hipotetizado.
+			\item parámetro de populación $\neq$ valor hipotetizado.
+		\end{itemize}
+\end{itemize}
+
+Para realizar un test de hipótesis, primero debe escogerse un test, y aplicarlo a las muestras de la población a analizar. Después, la hipótesis nula es rechazada o no dependiendo de el valor-p obtenido.
+
+Un test de hipótesis muy usado es el test t-student~\ref{eq:tstudent}.
+
+\begin{equation}
+	t = \frac{\tilde{x} - \mu_0}{s / \sqrt{n}}
+	\label{eq:tstudent}
+\end{equation}
+
+El valor-p, es la probabilidad condicional de los valores a los extremos de un test estadístico, asumiendo que la hipótesis nula es cierta. Por convención, si la probabilidad de la hipótesis nula en $<5\%$, o $<0.05$, la hipótesis nula es rechazada. De lo contrario, no es posible rechazar la hipótesis nula, lo que no supone que esta sea cierta.
+
+\subsection{EL LABORATORIO DE EVALUACIÓN DEL \newline PRODUCTO}
+
+A lo largo del proceso de fabricación de una cubierta,
+son varios los estándares de calidad que debe cumplir el producto
+para que pueda ser vendido en los distintos mercados a nivel global.
+Desde la composición química de las materias primas usadas,
+hasta las propiedades físicas del producto finalizado,
+la certificación de que el producto se halle dentro de los limites especificados,
+internamente como externamente, asegura un producto de calidad.
+
+En el proceso final de control de calidad
+que se lleva a cabo en un laboratorio de evaluación del producto,
+estos son los ensayos principales.
+
+\begin{itemize}
+	\item Ensayos Endurance
+	\item Ensayos Rolling Resistance
+	\item Ensayos dimensionales
+\end{itemize}
+
+En el laboratorio que ha sido el sujeto analizado en este trabajo,
+son dos clientes internos los que comparten los recursos disponibles.
+Por una parte, se encuentran los procesos de conformidad de la producción (CP),
+encargados de aseguramiento de la calidad
+de el producto destinado a la venta a clientes
+Por otra parte, se encuentran los procesos de desarrollo de nuevos productos,
+o el departamento de industrialización (IND),
+encargados de desarrollar nuevas lineas del producto,
+y optimizar los procesos de producción
+mediante cambios controlados que suceden a bachas.
+Finalmente, se reciben solicitudes de ensayo de otras plantas (EXT) para dar soporte
+y abastecer sus necesidades de aseguramiento de la calidad.
+Estas 3 fuentes de muestras de ensayo
+suman la cantidad descrita en la tabla~\ref{tab:2_tbl_actual_demand}.
+Debido al incremento en la actividad en los años recientes,
+parece que se ha llegado a saturar
+la capacidad actual del laboratorio para realizar ensayos.
+Las perspectivas de futuro, prevén que el incremento de la actividad continúe,
+por lo que la fabrica experimentará una evolución al alza
+tanto de la producción regular como de los procesos de industrialización.
+
+\begin{table}
+	\centering
+	\caption{Suma de la demanda actual de ensayos por tipo de ensayo.}
+	\input{fig/2_tbl_actual_demand}
+	\label{tab:2_tbl_actual_demand}
+\end{table}
+
+El flujo de los procesos llevados a cabo en el laboratorio,
+es representado en la Figura~\ref{fig:2_fc_lep_diagram}.
+
+\begin{figure}
+	\begin{center}
+		\includestandalone{fig/2_fc_lep_diagram}
+	\end{center}
+	\caption{Diagrama de flujo de los procesos llevados a capo en el Laboratorio de Evaluación del Producto.}
+	\label{fig:2_fc_lep_diagram}
+\end{figure}
+
+\subsubsection{Ensayos Endurance}
+Estos ensayos someten a las cubiertas a unas condiciones particularmente extremas
+que no se llegan a alcanzar dentro del margen de uso habitual
+para el que están diseñadas.
+El ensayo consiste en hacer rodar el objeto de ensayo
+durante un periodo aproximado de 72 horas a una temperatura constante de 40 ºC,
+aumentando la carga en pasos discretos a lo largo del test.
+
+El laboratorio dispone de 4 maquinas
+similares a la que aparece en la Figura~\ref{fig:2_endurance_machine},
+cada una de ellas teniendo la capacidad de montar hasta 2 cubiertas.
+
+El ensayo se reporta como exitoso
+si el objeto de ensayo no ha sufrido deformaciones
+antes de el tiempo especificado internamente para cada producto.
+Una vez finalizado el test, 2 secciones son cortadas y pulidas
+por un operario y son almacenadas para la elaboración del reporte. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{fig/2_endurance_machine}
+	\end{center}
+	\caption{Maquina utilizada en los ensayos Endurance}
+	\label{fig:2_endurance_machine}
+\end{figure}
+
+\subsubsection{Ensayos Rolling Resistance}
+El objetivo de este ensayo es determinar el consumo energético
+de la cubierta debido a la fricción causada mientras esta rueda.
+La maquina que aparece en la Figura~\ref{fig:2_rr_machine} mide la resistencia que ofrece
+el objeto de ensayo a 25 ºC durante alrededor de 3 horas.
+La particularidad de este ensayo consiste en que
+el resultado es sensible a la presión de inflado y temperatura de la sala.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=\textwidth]{fig/2_rr_machine}
+	\end{center}
+	\caption{Maquina utilizada en los ensayos Rolling Resistance}
+	\label{fig:2_rr_machine}
+\end{figure}
+
+El laboratorio dispone de una maquina capaz de realizar estos ensayos.
+Dependiendo del cliente interno, las muestras de ensayo serán almacenadas
+después del test durante 2 semanas
+para después ser inutilizadas por el operario mediante un corte.
+
+\subsubsection{Análisis dimensional}
+El objetivo de este ensayo es verificar que
+tanto las dimensiones generales de la cubierta,
+como sus componentes internos
+quedan dentro de la tolerancia de las especificaciones.
+
+Para ello, el laboratorio dispone de 2 técnicos adicionales
+que se dedican únicamente a llevar a cabo estos análisis.
+Cada análisis implica una alta carga de trabajo
+para el operario dedicado a preparar las secciones analizadas.

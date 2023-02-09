@@ -1,0 +1,727 @@
+\appendix
+\section{ANEXO I: CÓDIGO FUENTE}
+\subsection{EXPOSICIÓN DE UN CASO FICTICIO DE UNA DES}\label{apnd1}
+
+\begin{verbatim}
+# -*- coding: utf-8 -*-
+""
+Created on Thu Oct  6 17:37:23 2022
+
+@author: andoi
+"""
+
+import simpy
+import random
+import pandas as pd
+from numpy import random as nprng
+import csv
+
+rng = nprng.default_rng()
+
+# Global class cantaining the system common variables
+
+
+class g:
+    DURATION = 960  # Duration of the simulation in minutes (16 hours)
+    RUNS = 20
+
+    GAS_STATION_QTY = 4  # units
+    PARKING_CAPACITY = 100  # units
+    P_REFILL = 0.5  # Chance a car might refill it's tank at the gas station
+
+    DRIVE_LONG = (8, 3)  # (Shape 'k', Scale 'theta') min. Gamma distribution.
+    DRIVE_SHORT = (2, 3, 4)  # (a, m, b) min. Triangular distribution.
+    SEARCH_PARKING = (10, 1)  # (k, theta) min. Gamma distribution.
+    REFILL = (4, 5, 8)  # (a, m, b) min. Triangular distribution.
+    INTER_ARRIVAL = (0.5, 5)  # exponential interarrival times for (A, B) pop.
+
+    PARKING_A = (560, 60)  # (Mean, S.Dev) in minutes. Normal distribution.
+    PARKING_B = (5, 0.7)  # (Mean, Sigma) in minutes. Lognormal distribution.
+    df = pd.DataFrame(columns=['RUN',
+                               'CAR_TYPE',
+                               'HAS_PARKED',
+                               'HAS_REFILLED',
+                               'A', 'B', 'C',
+                               'D', 'E', 'F',
+                               'G', 'H', 'I',
+                               'J', 'K',
+                               'T_DRIVE_LONG',
+                               'Q_REFILL',
+                               'T_REFILL',
+                               'T_DRIVE_SHORT',
+                               'T_SEARCH_PARKING',
+                               'T_PARKED'])
+
+# Defines attributes of car class, the dynamic entity moving through the model.
+
+
+class car:
+
+    def __init__(self, car_id, driver_type, has_parked, has_refilled):
+        self.id = car_id
+        self.type = driver_type  # Either worker (A) or casual (B).
+        self.has_parked = has_parked
+        self.has_refilled = has_refilled
+
+# Contains the simulation model itself.
+
+
+class example_model:
+    def __init__(self, number_of_runs):
+        self.env = simpy.Environment()
+
+        self.car_counter = 0
+        self.parked_cars = 0
+
+        self.number_of_runs = number_of_runs
+
+        # Defining the resources
+        self.res_gs = simpy.Resource(self.env, capacity=g.GAS_STATION_QTY)
+
+        # Defining data stuctures
+        self.tmp_lst = []
+
+    def car_generator_A(self):
+        while self.env.now < 120:
+            car_gen = car(self.car_counter, 'A', True, False)
+            self.car_counter += 1
+
+            self.env.process(self.main_proc(car_gen))
+
+            sampled_interarrival = random.expovariate(1.0/g.INTER_ARRIVAL[0])
+            yield self.env.timeout(sampled_interarrival)
+
+    def car_generator_B(self):
+        while True:
+            car_gen = car(self.car_counter, 'B', True, False)
+            self.car_counter += 1
+
+            self.env.process(self.main_proc(car_gen))
+
+           sampled_interarrival = random.expovariate(1.0/g.INTER_ARRIVAL[1])
+            yield self.env.timeout(sampled_interarrival)
+
+    def main_proc(self, car_ent):
+        tmp_dict = {"RUN": self.number_of_runs}
+        tmp_dict["CAR_TYPE"] = car_ent.type
+        tmp_dict["A"] = self.env.now
+
+        drive_long_time = rng.gamma(g.DRIVE_LONG[0], g.DRIVE_LONG[1])
+        yield self.env.timeout(drive_long_time)
+
+        tmp_dict["B"] = self.env.now
+
+        if random.uniform(0, 1) > 0.5:
+            car_ent.has_refilled = True
+            refill_time = rng.triangular(g.REFILL[0], g.REFILL[1], g.REFILL[2])
+            with self.res_gs.request() as req_gs:
+                yield req_gs
+                tmp_dict["C"] = self.env.now
+                yield self.env.timeout(refill_time)
+        else:
+            tmp_dict["C"] = self.env.now
+
+        tmp_dict["D"] = self.env.now
+
+        drive_short_time = rng.triangular(g.DRIVE_SHORT[0], g.DRIVE_SHORT[1],
+                                          g.DRIVE_SHORT[2])
+        yield self.env.timeout(drive_short_time)
+
+        tmp_dict["E"] = self.env.now
+
+        if self.parked_cars >= g.PARKING_CAPACITY:
+            car_ent.has_parked = False
+            search_parking_time = rng.gamma(g.SEARCH_PARKING[0], g.SEARCH_PARKING[1])
+            yield self.env.timeout(search_parking_time)
+        else:
+            self.parked_cars += 1
+
+        tmp_dict["F"] = self.env.now
+
+        if car_ent.type == "A":
+            parking_time = rng.normal(g.PARKING_A[0], g.PARKING_A[1])
+        else:
+            parking_time = rng.lognormal(g.PARKING_B[0], g.PARKING_B[1])
+
+        yield self.env.timeout(parking_time)
+
+        if car_ent.has_parked:
+            self.parked_cars -= 1
+
+        tmp_dict["G"] = self.env.now
+
+        drive_short_time = rng.triangular(g.DRIVE_SHORT[0], g.DRIVE_SHORT[1],
+                                          g.DRIVE_SHORT[2])
+        yield self.env.timeout(drive_short_time)
+
+        tmp_dict["H"] = self.env.now
+
+        if random.uniform(0,1) > 0.5:
+            car_ent.has_refilled = True
+            refill_time = rng.triangular(g.REFILL[0], g.REFILL[1], g.REFILL[2])
+            with self.res_gs.request() as req_gs:
+                yield req_gs
+                tmp_dict["I"] = self.env.now
+                yield self.env.timeout(refill_time)
+        else:
+            tmp_dict["I"] = self.env.now
+
+        tmp_dict["J"] = self.env.now
+
+        yield self.env.timeout(drive_long_time)
+
+        tmp_dict["K"] = self.env.now
+        tmp_dict["HAS_PARKED"] = car_ent.has_parked
+        tmp_dict["HAS_REFILLED"] = car_ent.has_refilled
+
+        self.tmp_lst.append(tmp_dict)
+
+    def run(self):
+        self.env.process(self.car_generator_A())
+        self.env.process(self.car_generator_B())
+
+        self.env.run(until=g.DURATION)
+        tmp_df = pd.DataFrame(self.tmp_lst)
+        g.df = pd.concat([g.df, tmp_df], ignore_index=True)
+        g.df['T_DRIVE_LONG'] = g.df['B'] - g.df['A'] + g.df['K'] - g.df['J']
+        g.df['Q_REFILL'] = g.df['C'] - g.df['B'] + g.df['I'] - g.df['H']
+        g.df['T_REFILL'] = g.df['D'] - g.df['C'] + g.df['J'] - g.df['I']
+        g.df['T_DRIVE_SHORT'] = g.df['E'] - g.df['D'] + g.df['H'] - g.df['G']
+        g.df['T_SEARCH_PARKING'] = g.df['F'] - g.df['E']
+        g.df['T_PARKED'] = g.df['G'] - g.df['F']
+        g.df.to_csv('out.csv', index=False)
+
+
+
+for run in range(g.RUNS):
+    print("Run ", run+1, "of ", g.RUNS, sep="")
+    my_example = example_model(run)
+    my_example.run()
+    print()
+\end{verbatim}
+
+\newpage
+
+\subsection{CÓDIGO FUENTE DE LA SIMULACIÓN PRINCIPAL}\label{apnd2}
+
+\begin{verbatim}
+# **************************************************************************** #
+#                                                                              #
+#                                                     ::::::::  :::::::::      #
+#    lep_sim_rewrited.py                                :+:      :+:    :+:    #
+#                                                    +:+        +:+    +:+     #
+#    By: andoitzcp <andoitzcp@gmail.com>             +#+        +#++:++#+      #
+#                                                    +#+        +#+            #
+#    Created: 2023/02/01 01:09:17 by andoitzcp       #+#    #+# #+#            #
+#    Updated: 2023/02/01 01:09:31 by acampo-p         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+import simpy
+import pandas as pd
+from numpy import random as nprng
+from functools import reduce
+
+rng = nprng.default_rng()
+
+
+class G:
+    SIM_DET = {
+            'SIM_DUR': 365 * 24 * 60,
+            'SHIFT_DUR': 8 * 60,
+            'SHIFT_N': 1,
+            'RUN_EXEC': 100,
+            }
+    P_QCED = {
+            'INTR_RVAL': 20 * 60 / 10,
+            'R_PRIO': 0,
+            'M_MEAN': 45,
+            'M_SDEV': 10,
+            'M_PRIO': -1,
+            'C_DUR': 3 * 60,
+            'C_PRIO': -3,
+            'P_DUR': 5,
+            'P_PRIO': -4,
+            'T_MEAN': 72 * 60,
+            'T_SDEV': 6 * 60,
+            }
+    P_RR = {
+            'INTR_RVAL': 8 * 60 / 10,
+            'R_PRIO': -1,
+            'M_MEAN': 30,
+            'M_SDEV': 5,
+            'M_PRIO': -2,
+            'C_DUR': 6 * 60,
+            'C_PRIO': -2,
+            'T_POS': [150, 170, 200],
+            'T_PROB': [0.1, 0.7, 0.2],
+            }
+    RSRCS = {
+            'INDOOR': 4,
+            'RRM': 1,
+            'BUTLR': 1,
+            'TECHN': 1,
+            'MANT': 1,
+            'OPR': 1,
+            'Q_RIMS': 14,
+            'R_RIMS': 20,
+            }
+    P_RIM = {
+            'PRIO': 0,
+            'A': 12,
+            'M': 15,
+            'B': 20,
+            }
+
+
+class data:
+    df = pd.DataFrame()
+
+    def calc_intervals(df):
+        df['Q_GEN'] = df['RIM1'] - df['GEN']
+        df['Q_RIM'] = df['RIM2'] - df['RIM1']
+        df['D_RIM'] = df['RIM3'] - df['RIM2']
+        df['Q_MOUNT'] = df['MOUNT1'] - df['RIM3']
+        df['T_MOUNT'] = df['MOUNT2'] - df['MOUNT1']
+        df['D_MOUNT'] = df['MOUNT3'] - df['MOUNT2']
+        df['Q_COND'] = df['COND1'] - df['MOUNT3']
+        df['T_COND'] = df['COND2'] - df['COND1']
+        df['D_COND'] = df['COND3'] - df['COND2']
+        df['Q_PMEAS'] = df['PMEAS1'] - df['COND3']
+        df['T_PMEAS'] = df['PMEAS2'] - df['PMEAS1']
+        df['D_PMEAS'] = df['PMEAS3'] - df['PMEAS2']
+        df['Q_QCED'] = df['QCED1'] - df['PMEAS3']
+        df['D_QCED'] = df['QCED2'] - df['QCED1']
+
+        df['Q_GEN_h'] = df['Q_GEN'] / 60
+        df['Q_RIM_h'] = df['Q_RIM'] / 60
+        df['D_RIM_h'] = df['D_RIM'] / 60
+        df['Q_MOUNT_h'] = df['Q_MOUNT'] / 60
+        df['T_MOUNT_h'] = df['T_MOUNT'] / 60
+        df['D_MOUNT_h'] = df['D_MOUNT'] / 60
+        df['Q_COND_h'] = df['Q_COND'] / 60
+        df['T_COND_h'] = df['T_COND'] / 60
+        df['D_COND_h'] = df['D_COND'] / 60
+        df['Q_PMEAS_h'] = df['Q_PMEAS'] / 60
+        df['T_PMEAS_h'] = df['T_PMEAS'] / 60
+        df['D_PMEAS_h'] = df['D_PMEAS'] / 60
+        df['Q_QCED_h'] = df['Q_QCED'] / 60
+        df['D_QCED_h'] = df['D_QCED'] / 60
+
+    def stat_calc(df):
+        filtered_df = df.loc[df['D_QCED_h'] > 0]
+        df2 = filtered_df.groupby(['TEST'])['TEST'].count()
+        print(df2)
+
+class tire:
+
+    def __init__(self, t_id, t_test, t_client):
+        self.id = t_id
+        self.test = t_test
+        self.client = t_client
+
+
+class lab_model:
+
+    def __init__(self, run_nbr):
+        self.env = simpy.Environment()
+        self.run_nbr = run_nbr
+        self.tire_cntr = 0
+        self.tire_bufr_indoor = []
+        self.tire_bufr_rr = []
+
+        # Resources
+        self.rsrc_indoor = \
+            simpy.Resource(self.env, capacity=G.RSRCS['INDOOR'])
+        self.rsrc_rrm = \
+            simpy.Resource(self.env, capacity=G.RSRCS['RRM'])
+        self.rsrc_butlr = \
+            simpy.Resource(self.env, capacity=G.RSRCS['BUTLR'])
+        self.rsrc_techn = \
+            simpy.PreemptiveResource(self.env, capacity=G.RSRCS['TECHN'])
+        self.rsrc_mant = \
+            simpy.Resource(self.env, capacity=G.RSRCS['MANT'])
+        self.rsrc_opr = \
+            simpy.Resource(self.env, capacity=G.RSRCS['OPR'])
+        self.rsrc_qrims = \
+            simpy.Resource(self.env, capacity=G.RSRCS['Q_RIMS'])
+        self.rsrc_rrims = \
+            simpy.Resource(self.env, capacity=G.RSRCS['R_RIMS'])
+
+        # Temporal storage for data
+        self.tmp_lst_gen = []
+        self.tmp_lst_rim = []
+        self.tmp_lst_mount = []
+        self.tmp_lst_cond = []
+        self.tmp_lst_pmeasure = []
+        self.tmp_lst_test = []
+
+    def gen_qced_rp(self):
+        self.env.timeout(32.59)
+        while True:
+            tmp_dict = {'RUN': self.run_nbr,
+                        'TEST': 'QCED',
+                        'CLIENT': 'RP',
+                        }
+
+            self.tire_cntr += 1
+            obj = tire(self.tire_cntr, "QCED", "RP")
+            self.tire_bufr_indoor.append(obj)
+            intr_rval = rng.exponential(G.P_QCED['INTR_RVAL'])
+
+            tmp_dict['ID'] = self.tire_cntr
+            tmp_dict['GEN'] = self.env.now
+            self.tmp_lst_gen.append(tmp_dict)
+            self.env.process(self.proc_master_indoor())
+            yield self.env.timeout(intr_rval)
+
+    def gen_rr_rp(self):
+        while True:
+            tmp_dict = {'RUN': self.run_nbr,
+                        'TEST': 'RR',
+                        'CLIENT': 'RP',
+                        }
+
+            self.tire_cntr += 1
+            obj = tire(self.tire_cntr, "RR", "RP")
+            self.tire_bufr_rr.append(obj)
+            intr_rval = rng.exponential(G.P_RR['INTR_RVAL'])
+
+            tmp_dict['ID'] = self.tire_cntr
+            tmp_dict['GEN'] = self.env.now
+            self.tmp_lst_gen.append(tmp_dict)
+            self.env.process(self.proc_master_rr())
+            yield self.env.timeout(intr_rval)
+
+    def obstruct_techn(self):
+        day = 0
+        week = ['M', 'T', 'X', 'R', 'F', 'S', 'U']
+        t_up = G.SIM_DET['SHIFT_N'] * G.SIM_DET['SHIFT_DUR']
+        while True:
+            t_down = (24 * 60) - t_up
+            if week[day % 7] == 'F':
+                day += 3
+                t_down += 48 * 60
+            else:
+                day += 1
+            yield self.env.timeout(t_up)
+            with self.rsrc_techn.request(priority=-10, preempt=True) \
+                    as req_techn_A:
+                yield req_techn_A
+                yield self.env.timeout(t_down)
+
+    def obstruct_indoor(self):
+        while True:
+            t_tofailure = rng.exponential(G.F_DET['INTR'])
+            yield self.env.timeout(t_tofailure)
+            if not self.broken:
+                self.proc_qced_A.interrutp()
+
+    def t_conditioning(self, t_left):
+        t_toshiftend = (G.SIM_DET['SHIFT_DUR'] * G.SIM_DET['SHIFT_N']) - self.env.now % (24*60)
+        if G.SIM_DET['SHIFT_N'] == 3:
+            return t_left
+        elif t_left > t_toshiftend:
+            t_left = G.SIM_DET['SHIFT_DUR'] * (3 - G.SIM_DET['SHIFT_N'])
+            t_left += t_toshiftend
+        return t_left
+
+    def proc_master_indoor(self):
+        yield (self.env.timeout(2*24*60))
+        if len(self.tire_bufr_indoor) < 2:
+            pass
+        else:
+            qced_sample_A = self.tire_bufr_indoor.pop(0)
+            qced_sample_B = self.tire_bufr_indoor.pop(0)
+            with self.rsrc_qrims.request() as req_qrims:
+                yield req_qrims
+                yield self.env.process(self.proc_rim(qced_sample_A))
+                yield self.env.process(self.proc_rim(qced_sample_B))
+                with self.rsrc_indoor.request() as req_indoor:
+                    yield req_indoor
+                    yield self.env.process(self.proc_mount(qced_sample_A))
+                    yield self.env.process(self.proc_mount(qced_sample_B))
+                    yield self.env.process(self.proc_cond_qced(qced_sample_A,
+                                                               qced_sample_B))
+                    yield self.env.process(
+                            self.proc_pmeasure(qced_sample_A,
+                                               qced_sample_B))
+                    yield self.env.process(
+                            self.proc_qced_A(qced_sample_A)) & \
+                        self.env.process(
+                                self.proc_qced_B(qced_sample_B))
+
+    def proc_master_rr(self):
+        if len(self.tire_bufr_rr) > 0:
+            rr_sample = self.tire_bufr_rr.pop(0)
+            with self.rsrc_qrims.request() as req_qrims:
+                yield req_qrims
+                yield self.env.process(self.proc_rim(rr_sample))
+                yield self.env.process(self.proc_cond_rr(rr_sample))
+                with self.rsrc_rrm.request() as req_rrm:
+                    yield req_rrm
+                    yield self.env.process(self.proc_mount(rr_sample))
+                    yield self.env.process(self.proc_rr(rr_sample))
+
+    def proc_rim(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+
+        aux = [self.env.now]
+        prio = G.P_RIM['PRIO']
+        t_left = rng.triangular(G.P_RIM['A'], G.P_RIM['M'], G.P_RIM['B'])
+        while t_left > 0:
+            with self.rsrc_techn.request(priority=prio,
+                                         preempt=False) as req_techn_rim, \
+                    self.rsrc_butlr.request() as req_butlr:
+                try:
+                    yield req_techn_rim & req_butlr
+                    aux.append(self.env.now)
+                    yield self.env.timeout(t_left)
+                    t_left = 0
+                except simpy.Interrupt as interrupt:
+                    usage = self.env.now - interrupt.cause.usage_since
+                    t_left -= usage
+                    prio -= 0.1
+
+        tmp_dict['RIM1'] = aux[0]
+        tmp_dict['RIM2'] = aux[1]
+        tmp_dict['RIM3'] = self.env.now
+        self.tmp_lst_rim.append(tmp_dict)
+
+    def proc_mount(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+
+        start = [self.env.now]
+        if tire_ent.test == 'QCED':
+            t_left = rng.normal(G.P_QCED['M_MEAN'], G.P_QCED['M_SDEV'])
+            prio = G.P_QCED['M_PRIO']
+        elif tire_ent.test == 'RR':
+            t_left = rng.normal(G.P_RR['M_MEAN'], G.P_RR['M_SDEV'])
+            prio = G.P_RR['M_PRIO']
+        while t_left > 0:
+            with self.rsrc_techn.request(priority=prio, preempt=False) \
+                    as req_techn_mount:
+                yield req_techn_mount
+                start.append(self.env.now)
+                try:
+                    yield self.env.timeout(t_left)
+                    t_left = 0
+                except simpy.Interrupt as interrupt:
+                    usage = self.env.now - interrupt.cause.usage_since
+                    t_left -= usage
+                    prio -= 0.1
+
+        tmp_dict['MOUNT1'] = start[0]
+        tmp_dict['MOUNT2'] = start[1]
+        tmp_dict['MOUNT3'] = self.env.now
+        self.tmp_lst_mount.append(tmp_dict)
+
+    def proc_cond_qced(self, tire_ent_A, tire_ent_B):
+        tmp_dict_A = {'ID': tire_ent_A.id}
+        tmp_dict_B = {'ID': tire_ent_B.id}
+
+        prio = G.P_QCED['C_PRIO']
+        start = [self.env.now]
+        with self.rsrc_techn.request(priority=prio, preempt=False) \
+                as req_techn_cond_qced:
+            yield req_techn_cond_qced
+        start.append(self.env.now)
+        t_left = self.t_conditioning(G.P_QCED['C_DUR'])
+        yield self.env.timeout(t_left)
+
+        tmp_dict_A['COND1'] = start[0]
+        tmp_dict_B['COND1'] = start[0]
+        tmp_dict_A['COND2'] = start[1]
+        tmp_dict_B['COND2'] = start[1]
+        tmp_dict_A['COND3'] = self.env.now
+        tmp_dict_B['COND3'] = self.env.now
+        self.tmp_lst_cond.append(tmp_dict_A)
+        self.tmp_lst_cond.append(tmp_dict_B)
+
+    def proc_cond_rr(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+
+        prio = G.P_RR['C_PRIO']
+        aux = [self.env.now]
+        with self.rsrc_techn.request(priority=prio, preempt=False) \
+                as req_techn_cond_rr:
+            yield req_techn_cond_rr
+        aux.append(self.env.now)
+        t_left = G.P_RR['C_DUR']
+        yield self.env.timeout(t_left)
+
+        tmp_dict['COND1'] = aux[0]
+        tmp_dict['COND2'] = aux[1]
+        tmp_dict['COND3'] = self.env.now
+        self.tmp_lst_cond.append(tmp_dict)
+
+    def proc_pmeasure(self, tire_ent_A, tire_ent_B):
+        tmp_dict_A = {'ID': tire_ent_A.id}
+        tmp_dict_B = {'ID': tire_ent_B.id}
+
+        start = [self.env.now]
+        start.append(self.env.now)
+        yield self.env.timeout(G.P_QCED['P_DUR'])
+
+        tmp_dict_A['PMEAS1'] = start[0]
+        tmp_dict_A['PMEAS2'] = start[1]
+        tmp_dict_A['PMEAS3'] = self.env.now
+        tmp_dict_B['PMEAS1'] = start[0]
+        tmp_dict_B['PMEAS2'] = start[1]
+        tmp_dict_B['PMEAS3'] = self.env.now
+        self.tmp_lst_pmeasure.append(tmp_dict_A)
+        self.tmp_lst_pmeasure.append(tmp_dict_B)
+
+    def proc_qced_A(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+        tmp_dict['QCED1'] = self.env.now
+
+        test_failure = False
+        t_left = rng.normal(G.P_QCED['T_MEAN'], G.P_QCED['T_SDEV'])
+        try:
+            yield self.env.timeout(t_left)
+        except simpy.Interrupt:
+            test_failure = True
+
+        tmp_dict['TEST_FAIL'] = test_failure
+        tmp_dict['QCED2'] = self.env.now
+        self.tmp_lst_test.append(tmp_dict)
+
+    def proc_qced_B(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+        tmp_dict['QCED1'] = self.env.now
+
+        test_failure = False
+        t_left = rng.normal(G.P_QCED['T_MEAN'], G.P_QCED['T_SDEV'])
+        try:
+            yield self.env.timeout(t_left)
+        except simpy.Interrupt:
+            test_failure = True
+
+        tmp_dict['TEST_FAIL'] = test_failure
+        tmp_dict['QCED2'] = self.env.now
+        self.tmp_lst_test.append(tmp_dict)
+
+    def proc_rr(self, tire_ent):
+        tmp_dict = {'ID': tire_ent.id}
+        tmp_dict['QCED1'] = self.env.now
+
+        test_failure = False
+        t_left = rng.normal(180, 20)
+        try:
+            yield self.env.timeout(t_left)
+        except simpy.Interrupt:
+            test_failure = True
+        tmp_dict['TEST_FAIL'] = test_failure
+        tmp_dict['QCED2'] = self.env.now
+        self.tmp_lst_test.append(tmp_dict)
+
+    def df_gen(self):
+        df_tmp_gen = pd.DataFrame(self.tmp_lst_gen)
+        df_tmp_rim = pd.DataFrame(self.tmp_lst_rim)
+        df_tmp_mount = pd.DataFrame(self.tmp_lst_mount)
+        df_tmp_cond = pd.DataFrame(self.tmp_lst_cond)
+        df_tmp_pmeasure = pd.DataFrame(self.tmp_lst_pmeasure)
+        df_tmp_test = pd.DataFrame(self.tmp_lst_test)
+        print(df_tmp_gen)
+
+        df_tmp_lst = [df_tmp_gen,
+                      df_tmp_rim,
+                      df_tmp_mount,
+                      df_tmp_cond,
+                      df_tmp_pmeasure,
+                      df_tmp_test]
+        df_tmp_master = reduce(lambda left, right:
+                               pd.merge(left, right, on=['ID'], how='outer'),
+                               df_tmp_lst)
+        data.df = pd.concat([data.df, df_tmp_master], ignore_index=True)
+
+    def run(self):
+        self.env.process(self.obstruct_techn())
+        self.env.process(self.gen_qced_rp())
+        self.env.process(self.gen_rr_rp())
+        self.env.run(until=G.SIM_DET['SIM_DUR'])
+
+        self.df_gen()
+
+
+for run in range(G.SIM_DET['RUN_EXEC']):
+    print("Run ", run+1, "of ", G.SIM_DET['RUN_EXEC'], sep="")
+    print(G.SIM_DET['RUN_EXEC'])
+    my_test_model = lab_model(run)
+    my_test_model.run()
+    print()
+
+data.calc_intervals(data.df)
+data.df.to_csv('lep.csv', index=False)
+df = data.df
+print(df)
+print(data.stat_calc(df))
+
+\end{verbatim}
+\newpage
+
+\section{ANEXO II: DIAGRAMAS DE FLUJO}\label{apnd3}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_gen}
+	\end{center}
+	\caption{Modelo de generación de entidades}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_techn_obstruct}
+	\end{center}
+	\caption{Modelo de obstrucción del técnico durante horas no activas}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_master_indoor}
+	\end{center}
+	\caption{Modelo del proceso maestro de ensayos Endurance}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_master_rolling}
+	\end{center}
+	\caption{Modelo del proceso maestro de ensayos Endurance}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_rim}
+	\end{center}
+	\caption{Modelo del subproceso de enllantado}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_mount}
+	\end{center}
+	\caption{Modelo del subproceso de montado de máquina}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_cond}
+	\end{center}
+	\caption{Modelo del subproceso de acondicionado de sala}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_padj}
+	\end{center}
+	\caption{Modelo del subproceso de ajuste de presión de la cubierta}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\includestandalone{fig/3_fc_test}
+	\end{center}
+	\caption{Modelo del subproceso de ensayo de la cubierta}
+\end{figure}

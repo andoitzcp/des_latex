@@ -1,0 +1,46 @@
+\documentclass[varwidth=\maxdimen]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{table}
+	\label{tmp_label}
+	\centering
+	\caption{tmp_cap}
+	\begin{tabular}{ c c l }
+		\hline
+		NOMBRE & VALOR & DESCRIPCION \\
+		\hline
+		Duration & 960 min & Intervalo en el que la simulacion sera ejecutada \\
+		\hline
+		Runs & 20 u. & Numero de ejecuciones de la simulacion \\
+		\hline
+		Gas station qty. & 4 u. & Numero de estaciones de servicio de la gasolinera \\
+		\hline
+		Parking capacity & 100 u. & Numero de plazas totales de parking \\
+		\hline
+		P\_REFILL & 50\% & probabilidad de que un vehiculo reposte en la gasolinera \\
+		\hline
+		Drive long & k=8, \theta=3 & Distribucion gamma de la duracion del proceso 1 \\
+		\hline
+		Drive short & min=2, mode=3, max=4 & Distribucion triangular de la duracion del proceso 2 \\
+		\hline
+		Search parking & k=10, \theta=1 & Distribucion gamma de la duracion del proceso 3 \\
+		\hline
+		REFILL & min=4, mode=5, max=8 & Distribucion triangular de la duracion del proceso 4 \\
+		\hline
+		INTER\_ARRIVAL(A) & \lambda=1 & Distibucion exponencial de el tiempo entre llegadas de coches tipo A \\
+		\hline
+		INTER\_ARRIVAL(B) & \lambda=15 & Distibucion exponencial de el tiempo entre llegadas de coches tipo B \\
+		\hline
+		PARKING(A) & \mu=560, \sigma=60 & Distribucion normal del tiempo transcurrido al estacionar coched de tipo A \\
+		\hline
+		PARKING(B) & \mu=5, \sigma=0.7 & Distribucion logaritmica de el tiempo transcurrido al estacionar coched de tipo A \\
+		\hline
+		
+	\end{tabular}
+\end{table}
+
+\end{document}
