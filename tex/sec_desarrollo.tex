@@ -6,7 +6,7 @@
 %    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
 %                                                 +#+#+#+#+#+   +#+            %
 %    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
-%    Updated: 2023/02/08 18:35:36 by acampo-p         ###   ########.fr        %
+%    Updated: 2023/02/10 03:21:55 by acampo-p         ###   ########.fr        %
 %                                                                              %
 % **************************************************************************** %
 
@@ -14,59 +14,41 @@
 
 \subsection{FORMULACIÓN DEL PROBLEMA, \newline ESTABLECIMIENTO DE OBJETIVOS Y PLAN \newline GENERAL}
 
-El problema que ha llevado a la necesidad de redactar este trabajo
-es la aparente escasez de recursos para acoger
-el futuro incremento de la demanda de ensayos en el LEP.
-Desde la gerencia, existen dudas sobre cual puede ser el factor limitante
-en los procesos actuales.
-Se observan varios cuellos de botella,
-entre los cuales están;
-el escaso tiempo de utilización de las maquinas endurance y rolling,
-el operario de corte y pulido saturado de trabajo
-y la falta de flexibilidad que industrialización reclama al laboratorio.
-
-Con el fin de dar respuesta al que parece ser el factor mas relevante,
-el tiempo de utilización de maquina,
-se ha propuesto la idea de desarrollar una DES.
-El propósito sera determinar la causa de el bajo rendimiento de ensayos
-y sugerir alternativas al flujo de trabajo actual
-para satisfacer la futura demanda de ensayos.
-
-Para ello primeramente,
-se determinara el alcance de la simulación que se realizará.
-Se desarrollará un modelo en base a el alcance determinado,
-y se tratara de sacar conclusiones en base a los resultados obtenidos.
-
-Los objetivos de este proyecto quedan mas detallados en la sección~\ref{}.
+Esta etapa corresponde a la sección~\ref{sec:intro} de introducción.
 
 \subsection{CONCEPTUALIZACIÓN DEL MODELO}
 
-Empezando desde el final, una vez han quedado los objetivos descritos, se ha procedido ha determinar las cuestiones clave para dar con una solución. La siguiente lista de preguntas ha sido la que al autor le ha parecido de mayor relevancia:
+Empezando desde el final,
+una vez han quedado los objetivos descritos,
+se ha procedido ha determinar las cuestiones clave para dar con una solución.
+La siguiente lista de preguntas ha sido ha sido formulada.
 
 \begin{itemize}
-	\item Que sucedería si el tiempo disponible para el montaje de las maquinas fuese mayor? Aumentar el numero de turnos cuantos ensayos mas acabaría proporcionando?
-	\item Cual sería el efecto de que dos técnicos trabajasen simultáneamente en los ensayos?
-	\item Como afectaría la instalación de maquinas Endurance adicionales a la cantidad de ensayos realizados?
+	\item ¿Que sucedería si el tiempo disponible para el montaje de las maquinas fuese mayor? Aumentar el numero de turnos cuantos ensayos mas acabaría proporcionando?
+	\item ¿Cual sería el efecto de que dos técnicos trabajasen simultáneamente en los ensayos?
+	\item ¿Como afectaría la instalación de maquinas Endurance
+		adicionales a la cantidad de ensayos realizados?
 \end{itemize}
 
 Para responder a las preguntas planteadas,
 se ha programado la simulación de tal manera que devuelva una tabla
 conteniendo los tiempos de inicio y fin de cada proceso.
 A través de análisis de los datos indexados,
-se han podido obtener estadísticas como;
+se han podido obtener estadísticas como:
 numero de ensayos totales realizados por tipo de test,
 o el tiempo total de maquina en funcionamiento
 por cada ejecución de la simulación.
 
 El modelo a reproducir para obtener los datos descritos	en el anterior párrafo,
 ha sido deliberadamente diseñado de manera simple.
-Esto ha facilitado la obtención de datos representativos y su posterior análisis.
-Se ha tomado parte de el diagrama de la Figura~\ref{},
+Esto ha facilitado la obtención de datos representativos
+y su posterior análisis.
+Se ha tomado parte de el diagrama de la Figura~\ref{fig:2_fc_lep_diagram},
 Excluyendo ciertos procesos irrelevantes
 para las preguntas previamente formuladas.
-Estos diagramas se encuentran en el Anexo~\ref{}.
+Estos diagramas se encuentran en el Anexo~\ref{apnd3}.
 
-Los inputs necesarios para el funcionamiento del modelo
+Los \textit{inputs} necesarios para el funcionamiento del modelo
 se han recopilado en las Tablas~\ref{tab:3_tbl_sim_det},
 \ref{tab:3_tbl_rsrc},
 \ref{tab:3_tbl_indoor_det}
@@ -103,30 +85,49 @@ y \ref{tab:3_tbl_rr_det}.
 
 \subsection{RECOPILACIÓN DE DATOS}
 
-Al carecer de la disponibilidad de datos, se ha tratado de representar cada proceso mediante distribuciones acordes a sus propiedades. Para los tiempos entre llegadas de objetos en la simulación, se ha elegido la distribución exponencial debido a su asociación a tiempos de espera entre eventos.
+Se ha tratado de representar cada proceso mediante
+distribuciones acordes a sus propiedades.
+Para los tiempos entre llegadas de objetos en la simulación,
+se ha elegido la distribución exponencial debido a
+su asociación a tiempos de espera entre eventos.
 
-Para los procesos de los que menos información se poseía se ha optado por representarlos mediante una distribución triangular. Ya que aunque no hubiera información precisa, se ha podido estimar correctamente sus duraciones típicas, y sus limites superiores e inferiores.
+Para los procesos de los que menos información se poseía
+se ha optado por representarlos mediante una distribución triangular.
+Se ha podido estimar correctamente sus duraciones típicas, y sus limites superiores e inferiores.
 
-Finalmente para los procesos cuya información era algo mas extensa, se han tratado de representar mediante distribuciones normales, debido a la sencillez y versatilidad de las mismas.
+Finalmente para los procesos cuya información era extensa,
+se han tratado de representar mediante distribuciones normales,
+debido a la sencillez y versatilidad de las mismas.
+
 \subsection{TRADUCCIÓN DEL MODELO}
 
 El modelo traducido, que se encuentra en el Anexo~\ref{apnd3},
 puede dividirse en 3 procesos generales:
 
 \paragraph{La generación de entidades}
-se encarga de crear instancias de las cubiertas que serán alimentadas a los procesos maestros de cada ensayo. Son 2 los generadores que posee la simulación, uno para los ensayos Endurance, y otro para los ensayos Rolling.
+se encarga de crear instancias de las cubiertas que son alimentadas
+a los procesos maestros de cada ensayo.
+Son 2 los generadores que posee la simulación,
+uno para los ensayos Endurance, y otro para los ensayos Rolling.
 
 \paragraph{Los procesos maestros}
-son los responsables de ejecutar los subprocesos en el orden correspondiente mientras demandan los recursos necesarios durante su transcurso. Al igual que los generadores, hay 2 procesos maestros, uno para cada tipo de ensayo.
+son los responsables de ejecutar los subprocesos
+en el orden correspondiente mientras demandan
+los recursos necesarios durante su transcurso.
+Al igual que los generadores, hay 2 procesos maestros,
+uno para cada tipo de ensayo.
 
 \paragraph{Los subprocesos}
-son las subrutinas llamadas por los procesos maestros. Crear módulos para cada tarea mejora la legibilidad del código.
+son las subrutinas llamadas por los procesos maestros.
+Crear módulos para cada tarea mejora la legibilidad del código.
+
 \paragraph{La obstrucción del técnico}
-es el proceso que simula el inicio y el fin de una jornada laboral, y hace transcurrir el tiempo, incluyendo los fines de semana.
+es el proceso que simula el inicio y el fin de una jornada laboral,
+y hace transcurrir el tiempo, incluyendo los fines de semana.
 
 \subsection{VERIFICACIÓN Y VALIDACIÓN}
 
-El proceso de verificación se ha ido realizando a lo largo de la simulación.
+El proceso de verificación se ha realizado a lo largo de la simulación.
 Se ha comprobado que los pasos se ejecutan en el orden esperado,
 y se ha revisado la lógica de los algoritmos propuestos.
 

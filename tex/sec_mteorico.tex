@@ -6,7 +6,7 @@
 %    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
 %                                                 +#+#+#+#+#+   +#+            %
 %    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
-%    Updated: 2023/02/09 09:35:20 by acampo-p         ###   ########.fr        %
+%    Updated: 2023/02/10 03:38:02 by acampo-p         ###   ########.fr        %
 %                                                                              %
 % **************************************************************************** %
 
@@ -25,7 +25,7 @@ La simulación, hoy en día, es una de las tres metodologías consolidadas,
 en el ámbito científico e ingenieril,
 para la resolución de problemas \citep{banks1998handbook}.
 Siendo esta metodología descrita como ``la técnica del ultimo recurso'',
-por el autor \citep{garzia1986discrete},
+por \citep{garzia1986discrete},
 debido a la intensa demanda computacional
 que requería en el momento de su publicación,
 el transcurso de los años ha mermado esta desventaja.
@@ -40,7 +40,6 @@ Diversos autores describen la simulación de la siguiente manera
 	\item ``La simulación es el proceso de diseñar
 		el modelo de un sistema real y realizar experimentos
 		con este modelo con el propósito de,
-		o bien,
 		entender el comportamiento del sistema,
 		o evaluar distintas estrategias
 		(dentro de los limites impuestos por un criterio
@@ -71,7 +70,7 @@ suelen representar las variables de manera explicita,
 relacionando variables independientes y variables dependientes
 para obtener un resultado.
 En el caso de una DES, el modelo utilizado se enfoca en
-la representación de sus componentes internos y sus interacciones..
+la representación de sus componentes internos y sus interacciones.
 
 El funcionamiento de la DES, se basa en registrar los cambios
 que van ocurriendo en el estado del sistema durante el transcurso del tiempo.
@@ -145,6 +144,8 @@ Cuando la entidad tome el recurso,
 lo mantendrá ocupado durante la duración del proceso.
 Los recursos pueden tener varios estados,
 como disponible, ocupado, averiado, en mantenimiento\ldots
+Un ejemplo de recurso, puede ser el número de
+estaciones de autoservicio que posee una gasolinera.
 
 \paragraph{Una actividad}
 es un periodo de tiempo,
@@ -194,7 +195,7 @@ La consultoría ve apropiado usar una DES para valorar
 el impacto de las distintas propuestas
 y proponer un plan de acción optimo a la entidad contratante.
 
-Entre los objetivos del contratista se encuentra el objetivo principal de
+El objetivo principal de el ayuntamiento es
 minimizar la cantidad de vehículos que circulan por la ciudad.
 Una de las causas de congestión apunta a una estación de repostaje
 con unos precios particularmente competitivos
@@ -261,17 +262,9 @@ A raíz de un análisis obtiene los datos mostrados en la Tabla~\ref{tab:2_tbl_s
 	\label{tab:2_tbl_spec02_ex}
 \end{table}
 
-Una vez finalizado el proceso de diseño de la simulación,
-la consultoría posee el código fuente expuesto en la
-Sección~\ref{apnd1} del Anexo I.
-Este programa, devuelve la Tabla,
-la cual contiene datos acerca del inicio y final de cada proceso.
-Con el correcto tratamiento de datos recibidos,
-se obtienen los siguientes resultados.
-
 Como puede observarse en la Figura~\ref{fig:2_fig_example_01},
-la adición de 2 estaciones de combustible
-evita el colapso de la gasolinera en intervalos críticos.
+la adición de 2 estaciones de autoservicio en la gasolinera
+evita su colapso en intervalos críticos.
 En el gráfico situado a la izquierda,
 el pico de actividad azul entorno al minuto 150 de la ejecución de la simulación,
 se ve drásticamente reducido, mientras que el repunte secundario es completamente eliminado.
@@ -356,8 +349,7 @@ Es por ello que debe haber comunicación y feedback constante entre cliente y eq
 En el caso de este trabajo, algo similar sucede.
 Al ser un único autor, la comunicación no sera un factor importante,
 pero esto conllevara otras complicaciones.
-El conocimiento de el autor debe ser extenso en cada ámbito,
-debe comprender profundamente el sistema a modelar, y a su vez,
+El autor debe, comprender profundamente el sistema a modelar, y a su vez,
 dominar el uso de las herramientas de simulación.
 Manejar ambas, requerirá recordar la formulación del problema inicial
 más frecuentemente para no desviarse de la dirección.
@@ -392,7 +384,7 @@ Introduciendo en la simulación únicamente la complejidad necesaria,
 agilizará el proceso de desarrollo y mantendrá el enfoque original.
 
 Continuando con el alcance de la simulación,
-se deben detallar los procesos críticos en el calculo del output,
+se deben detallar los procesos críticos en el calculo del \textit{output},
 descartando o simplificando aquellos que no tengan gran impacto en la salida.
 Por ejemplo, modelar recursos abundantes en la simulación,
 no tendrá impacto en el output,
@@ -410,15 +402,12 @@ para entidades con atributos pobremente caracterizados.
 Cualquier DES requiere datos. La recopilación de la información del sistema,
 o la estimación en caso de ser un sistema ficticio, es una necesidad.
 
-En este trabajo, al no disponer de datos reales, se obviara el proceso de recopilación.
-El enfoque se situara en la correcta elección de las distribuciones, recopiladas en la sección~\ref{sec_prob_dist}, para representar el sistema ficticio a modelar.
-
 \paragraph{Traducción del modelo.}
 
 El modelo de simulación se construye a partir de la información desarrollada en el anterior punto.
 Este proceso consiste en traducir de manera eficaz el esqueleto previamente desarrollado,
 a un lenguaje que el ordenador pueda procesar.
-Para ello el libro sugiere lo siguiente:
+Para ello Banks sugiere lo siguiente:
 
 \begin{itemize}
 	\item Enfoque en el problema. El proyecto no debería limitarse a desarrollar el modelo,
@@ -427,6 +416,7 @@ Para ello el libro sugiere lo siguiente:
 	\item Comienzo simple. El comienzo del proyecto debe ser simple,
 		adquiriendo complejidad hasta alcanzar el detalle necesario.
 	\item Manejo de la inteligencia del modelo.
+		El modelo no debe superar el rendimiento de los procesos reales.
 		El modelo desarrollado puede desarrollar ventajas respecto a su contrapartida real,
 		como conocer la ubicación exacta de una pieza instantáneamente.
 		Los humanos que gestionan el proceso difícilmente van a poder lograr este control,
@@ -437,9 +427,9 @@ Para ello el libro sugiere lo siguiente:
 \end{itemize}
 \paragraph{Verificación y validación.}
 
-Comprobar el correcto funcionamiento de el proyecto desarrollado es fundamental.
+Comprobar el correcto funcionamiento de la DES es fundamental.
 Esta es la labor de la verificación y validación (VV).
-El autor sugiere que este paso se realice
+Banks sugiere que este paso se realice
 frecuentemente a lo largo de el proceso de desarrollo.
 Esto evita complicaciones una vez el proyecto se vuelve demasiado extenso y demasiado complejo.
 Realizar la VV en cada pieza funcional de el modelo
@@ -447,7 +437,7 @@ cada vez que suceda algún cambio es lo recomendable.
 
 Por una parte, la verificación es el proceso encargado de
 comprobar que la simulación se ejecute de la manera esperada.
-En este proceso se intentará hallar bugs en el programa.
+En este proceso se intentará hallar errores en el programa.
 Esto se logra comprobando que la ejecución de cada paso
 en la simulación sea la correcta y dé los resultados esperados.
 
@@ -470,12 +460,12 @@ este sera invalidado comenzando la revisión del mismo.
 Mediante el análisis del output obtenido de la simulación,
 se obtienen las conclusiones a las preguntas plateadas al inicio del proyecto.
 Primeramente, se deberán plantear los distintos escenarios que serán simulados.
-Estos escenarios serán ejecutados en la simulación obteniendo su output.
+Estos escenarios serán ejecutados en la simulación
+obteniendo su \textit{output}.
 El correcto tratamiento de los datos, junto con una exposición significativa de ellos dará claridad a los resultados.
 No obstante, para obtener las conclusiones deseadas, deberán realizarse testes estadísticos a los resultados para certificarlos.
-En este proyecto, se aplicaran los test descritos en la sección~\ref{sec_test_est}.
 
-\paragraph{Documentación y reporte.}
+\paragraph{Documentación y comunicación.}
 
 Con la intención de que este proyecto
 pueda ser continuado en el futuro por otra persona,
@@ -483,11 +473,7 @@ la documentación se vuelve necesaria.
 El proyecto se considera documentado,
 por una parte, mediante este trabajo,
 y por la otra mediante un código fuente auto-explicativo,
-con abundantes comentarios, que se haya en el Anexo~\ref{apnd2}.
-
-\paragraph{Implementación.}
-
-La implementación de este proyecto queda fuera de su alcance, por lo que no se profundizará en este tema.
+con abundantes comentarios.
 
 \subsection{TEORÍA DE LA PROBABILIDAD Y DES}
 
@@ -555,14 +541,17 @@ en los modelos de una DES son las siguientes:
 	\Gamma (k) = (k-1)!
 \end{equation}
 
-\subsubsection{Tests de hipótesis}\label{sec_test_est}
+\subsubsection{Test de hipótesis}\label{sec_test_est}
 
 La comprobación de los resultados obtenidos en las DES,
 es una parte fundamental de la simulación.
 Para ello se suelen emplear los test de hipótesis como muestra de la validez
 de las conclusiones obtenidas.
 
-El test de hipótesis involucra formular, 2 o más hipótesis, que serán puestas a prueba mediante el empleo de tests estadísticos, a las muestras poblacionales obtenidas \citep{martin2022introduction}.
+El test de hipótesis involucra formular,
+2 o más hipótesis, que serán puestas a prueba
+mediante el empleo de test estadísticos,
+a las muestras poblacionales obtenidas \citep{martin2022introduction}.
 
 Un formato común en el ámbito de test de hipótesis es el siguiente:
 
@@ -576,7 +565,10 @@ Un formato común en el ámbito de test de hipótesis es el siguiente:
 		\end{itemize}
 \end{itemize}
 
-Para realizar un test de hipótesis, primero debe escogerse un test, y aplicarlo a las muestras de la población a analizar. Después, la hipótesis nula es rechazada o no dependiendo de el valor-p obtenido.
+Para realizar un test de hipótesis,
+primero debe escogerse un test,
+y aplicarlo a las muestras de la población a analizar.
+Después, la hipótesis nula es rechazada o no dependiendo de el valor-p obtenido.
 
 Un test de hipótesis muy usado es el test t-student~\ref{eq:tstudent}.
 
@@ -585,121 +577,10 @@ Un test de hipótesis muy usado es el test t-student~\ref{eq:tstudent}.
 	\label{eq:tstudent}
 \end{equation}
 
-El valor-p, es la probabilidad condicional de los valores a los extremos de un test estadístico, asumiendo que la hipótesis nula es cierta. Por convención, si la probabilidad de la hipótesis nula en $<5\%$, o $<0.05$, la hipótesis nula es rechazada. De lo contrario, no es posible rechazar la hipótesis nula, lo que no supone que esta sea cierta.
-
-\subsection{EL LABORATORIO DE EVALUACIÓN DEL \newline PRODUCTO}
-
-A lo largo del proceso de fabricación de una cubierta,
-son varios los estándares de calidad que debe cumplir el producto
-para que pueda ser vendido en los distintos mercados a nivel global.
-Desde la composición química de las materias primas usadas,
-hasta las propiedades físicas del producto finalizado,
-la certificación de que el producto se halle dentro de los limites especificados,
-internamente como externamente, asegura un producto de calidad.
-
-En el proceso final de control de calidad
-que se lleva a cabo en un laboratorio de evaluación del producto,
-estos son los ensayos principales.
-
-\begin{itemize}
-	\item Ensayos Endurance
-	\item Ensayos Rolling Resistance
-	\item Ensayos dimensionales
-\end{itemize}
-
-En el laboratorio que ha sido el sujeto analizado en este trabajo,
-son dos clientes internos los que comparten los recursos disponibles.
-Por una parte, se encuentran los procesos de conformidad de la producción (CP),
-encargados de aseguramiento de la calidad
-de el producto destinado a la venta a clientes
-Por otra parte, se encuentran los procesos de desarrollo de nuevos productos,
-o el departamento de industrialización (IND),
-encargados de desarrollar nuevas lineas del producto,
-y optimizar los procesos de producción
-mediante cambios controlados que suceden a bachas.
-Finalmente, se reciben solicitudes de ensayo de otras plantas (EXT) para dar soporte
-y abastecer sus necesidades de aseguramiento de la calidad.
-Estas 3 fuentes de muestras de ensayo
-suman la cantidad descrita en la tabla~\ref{tab:2_tbl_actual_demand}.
-Debido al incremento en la actividad en los años recientes,
-parece que se ha llegado a saturar
-la capacidad actual del laboratorio para realizar ensayos.
-Las perspectivas de futuro, prevén que el incremento de la actividad continúe,
-por lo que la fabrica experimentará una evolución al alza
-tanto de la producción regular como de los procesos de industrialización.
-
-\begin{table}
-	\centering
-	\caption{Suma de la demanda actual de ensayos por tipo de ensayo.}
-	\input{fig/2_tbl_actual_demand}
-	\label{tab:2_tbl_actual_demand}
-\end{table}
-
-El flujo de los procesos llevados a cabo en el laboratorio,
-es representado en la Figura~\ref{fig:2_fc_lep_diagram}.
-
-\begin{figure}
-	\begin{center}
-		\includestandalone{fig/2_fc_lep_diagram}
-	\end{center}
-	\caption{Diagrama de flujo de los procesos llevados a capo en el Laboratorio de Evaluación del Producto.}
-	\label{fig:2_fc_lep_diagram}
-\end{figure}
-
-\subsubsection{Ensayos Endurance}
-Estos ensayos someten a las cubiertas a unas condiciones particularmente extremas
-que no se llegan a alcanzar dentro del margen de uso habitual
-para el que están diseñadas.
-El ensayo consiste en hacer rodar el objeto de ensayo
-durante un periodo aproximado de 72 horas a una temperatura constante de 40 ºC,
-aumentando la carga en pasos discretos a lo largo del test.
-
-El laboratorio dispone de 4 maquinas
-similares a la que aparece en la Figura~\ref{fig:2_endurance_machine},
-cada una de ellas teniendo la capacidad de montar hasta 2 cubiertas.
-
-El ensayo se reporta como exitoso
-si el objeto de ensayo no ha sufrido deformaciones
-antes de el tiempo especificado internamente para cada producto.
-Una vez finalizado el test, 2 secciones son cortadas y pulidas
-por un operario y son almacenadas para la elaboración del reporte. 
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=\textwidth]{fig/2_endurance_machine}
-	\end{center}
-	\caption{Maquina utilizada en los ensayos Endurance}
-	\label{fig:2_endurance_machine}
-\end{figure}
-
-\subsubsection{Ensayos Rolling Resistance}
-El objetivo de este ensayo es determinar el consumo energético
-de la cubierta debido a la fricción causada mientras esta rueda.
-La maquina que aparece en la Figura~\ref{fig:2_rr_machine} mide la resistencia que ofrece
-el objeto de ensayo a 25 ºC durante alrededor de 3 horas.
-La particularidad de este ensayo consiste en que
-el resultado es sensible a la presión de inflado y temperatura de la sala.
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=\textwidth]{fig/2_rr_machine}
-	\end{center}
-	\caption{Maquina utilizada en los ensayos Rolling Resistance}
-	\label{fig:2_rr_machine}
-\end{figure}
-
-El laboratorio dispone de una maquina capaz de realizar estos ensayos.
-Dependiendo del cliente interno, las muestras de ensayo serán almacenadas
-después del test durante 2 semanas
-para después ser inutilizadas por el operario mediante un corte.
-
-\subsubsection{Análisis dimensional}
-El objetivo de este ensayo es verificar que
-tanto las dimensiones generales de la cubierta,
-como sus componentes internos
-quedan dentro de la tolerancia de las especificaciones.
-
-Para ello, el laboratorio dispone de 2 técnicos adicionales
-que se dedican únicamente a llevar a cabo estos análisis.
-Cada análisis implica una alta carga de trabajo
-para el operario dedicado a preparar las secciones analizadas.
+El valor-p, es la probabilidad condicional de
+los valores a los extremos de un test estadístico,
+asumiendo que la hipótesis nula es cierta.
+Por convención, si la probabilidad de la hipótesis nula es $<5\%$, o $<0.05$,
+la hipótesis nula es rechazada.
+De lo contrario, no es posible rechazar la hipótesis nula,
+lo que no supone que esta sea cierta.
