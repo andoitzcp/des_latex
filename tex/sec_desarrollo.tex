@@ -6,7 +6,7 @@
 %    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
 %                                                 +#+#+#+#+#+   +#+            %
 %    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
-%    Updated: 2023/02/10 03:21:55 by acampo-p         ###   ########.fr        %
+%    Updated: 2023/02/13 04:11:05 by acampo-p         ###   ########.fr        %
 %                                                                              %
 % **************************************************************************** %
 
@@ -18,13 +18,16 @@ Esta etapa corresponde a la sección~\ref{sec:intro} de introducción.
 
 \subsection{CONCEPTUALIZACIÓN DEL MODELO}
 
-Empezando desde el final,
-una vez han quedado los objetivos descritos,
+Como se menciona en la sección~\ref{sec:modelconcept}, a la hora de diseñar el modelo
+es conveniente comenzar desde el planteamiento de los objetivos,
+e ir adquiriendo detalle hasta llegar a definir los \textit{inputs}.
+
+Una vez han quedado los objetivos descritos,
 se ha procedido ha determinar las cuestiones clave para dar con una solución.
 La siguiente lista de preguntas ha sido ha sido formulada.
 
 \begin{itemize}
-	\item ¿Que sucedería si el tiempo disponible para el montaje de las maquinas fuese mayor? Aumentar el numero de turnos cuantos ensayos mas acabaría proporcionando?
+	\item ¿Que sucedería si el tiempo disponible para el montaje de las maquinas fuese mayor? 
 	\item ¿Cual sería el efecto de que dos técnicos trabajasen simultáneamente en los ensayos?
 	\item ¿Como afectaría la instalación de maquinas Endurance
 		adicionales a la cantidad de ensayos realizados?
@@ -54,14 +57,14 @@ se han recopilado en las Tablas~\ref{tab:3_tbl_sim_det},
 \ref{tab:3_tbl_indoor_det}
 y \ref{tab:3_tbl_rr_det}.
 
-\begin{table}
+\begin{table}[H]
 	\centering
 	\caption{Características generales de la simulación.}
 	\input{fig/3_tbl_sim_det}
 	\label{tab:3_tbl_sim_det}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
 	\centering
 	\caption{Recursos representados en el modelo.}
 	\input{fig/3_tbl_rsrc}
@@ -85,18 +88,37 @@ y \ref{tab:3_tbl_rr_det}.
 
 \subsection{RECOPILACIÓN DE DATOS}
 
+En un proyecto de un laboratorio real,
+primeramente se habría buscado información en las bases de datos y en los registros históricos disponibles.
+En caso de no disponer de estos,
+se habrían medido la duración de los procesos en el acto.
+Una de las propuestas es cronometrar cada proceso entre 20 y 30 veces
+para obtener un rango de tiempo estimado.
+A este rango, se le aplicaría un
+ajuste de distribución de probabilidad que se usaría en la DES.
+Al trabajar con un laboratorio ficticio,
+no es posible la recopilación de datos dentro de un laboratorio.
+No obstante, el proyecto se ha planteado en base a estimaciones fundamentadas.
 Se ha tratado de representar cada proceso mediante
-distribuciones acordes a sus propiedades.
+distribuciones acordes a sus propiedades,
+descritas en la sección~\ref{sec_prob_dist}.
+
 Para los tiempos entre llegadas de objetos en la simulación,
 se ha elegido la distribución exponencial debido a
 su asociación a tiempos de espera entre eventos.
 
-Para los procesos de los que menos información se poseía
+Para los procesos de los que menos información se poseía,
+como puede ser los procesos de montaje y enllantado,
 se ha optado por representarlos mediante una distribución triangular.
-Se ha podido estimar correctamente sus duraciones típicas, y sus limites superiores e inferiores.
+Como se indica en la sección~\ref{sec_prob_dist},
+las distribuciones triangulares son adecuadas para aquellos procesos en los que no se disponga de mucha información.
 
-Finalmente para los procesos cuya información era extensa,
-se han tratado de representar mediante distribuciones normales,
+Finalmente en el caso de los ensayos \textit{Endurance},
+se ha estimado su duración media en base a los estándares de calidad
+especificados en la norma UNECE-54.
+En el caso de los ensayos \textit{Rolling Resistance} se ha estimado en base al estándar SAE J1269.
+La duración de estos ensayos,
+se ha tratado de representar mediante distribuciones normales,
 debido a la sencillez y versatilidad de las mismas.
 
 \subsection{TRADUCCIÓN DEL MODELO}

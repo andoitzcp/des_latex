@@ -6,7 +6,7 @@
 %    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
 %                                                 +#+#+#+#+#+   +#+            %
 %    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
-%    Updated: 2023/02/10 03:38:02 by acampo-p         ###   ########.fr        %
+%    Updated: 2023/02/13 04:11:09 by acampo-p         ###   ########.fr        %
 %                                                                              %
 % **************************************************************************** %
 
@@ -359,7 +359,7 @@ El establecimiento de varios objetivos alcanzables, cohesivos y correctamente se
 guiará el proceso de desarrollo.
 Esto objetivos quedan listados en la sección~\ref{sec_obj}.
 
-\paragraph{Conceptualización del modelo.}
+\paragraph{Conceptualización del modelo.}\label{sec:modelconcept}
 
 El sistema propuesto sugiere conceptualizar el modelo en orden inverso,
 es decir, comenzar identificando los objetivos del proyecto,
@@ -446,7 +446,7 @@ el comportamiento del modelo respecto a el comportamiento real del sistema.
 En el caso de poseer datos sobre el sistema simulado,
 el libro sugiere utilizar herramientas estadísticas como, el test Student t o
 análisis de regresión donde el ajuste a la realidad sera comprobado.
-En el caso de no poseer los datos del sistema, como es este, se optara por un enfoque cualitativo.
+En el caso de no poseer los datos del sistema, se optara por un enfoque cualitativo.
 Aunque no haya datos, el comportamiento de un sistema
 puede predecirse cualitativamente, al cambiar ciertas variables.
 Por ejemplo en un tanque de agua cilíndrico,
@@ -477,45 +477,111 @@ con abundantes comentarios.
 
 \subsection{TEORÍA DE LA PROBABILIDAD Y DES}
 
-La probabilidad esta estrechamente relacionada con la DES.
-Todo el calculo realizado en una simulación tiene el objetivo de
-calcular el valor esperado o la media
-de las variables dependientes de un proceso que se esta intentando medir.
-Definir ciertos conceptos estadísticos se vuelve imprescindible
-para el correcto desarrollo de este tipo de proyecto.
+La probabilidad está estrechamente relacionada con la DES.
+Previamente a comenzar el proceso de formulación del modelo de una DES,
+los datos empíricos medidos en los procesos reales
+se traducen a un modelo reproducible computacionalmente.
+A este ejercicio se le denomina comúnmente como
+ajuste de distribución de probabilidades.
+Esta distribuciones de probabilidades son
+continuamente usadas durante la simulación,
+con el fin de representar la aleatoriedad de
+los subprocesos que se llevan a cabo.
+Cada vez que un evento se activa en la simulación,
+se toma una muestra de su distribución de probabilidad asociada.
+Esta muestra o variable aleatoria corresponde a la duración de dicho evento.
+Concatenando la sucesión de eventos,
+se consigue replicar la aleatoriedad del sistema.
+
+El uso de la teoría de la probabilidad no acaba aquí.
+Una vez finalizada la etapa de simulación,
+los datos obtenidos de la simulación son puestos a prueba.
+Para evitar obtener conclusiones erróneas,
+debido a un resultado excepcional al azar,
+se realizan múltiples ejecuciones de la simulación.
+Los resultados obtenidos, son una población de
+las variables dependientes calculadas por la simulación.
+El método más común para determinar la diferencia
+entre los distintos escenarios simulados es el test de hipótesis.
 
 \subsubsection{Variables aleatorias o random}
 
 Según el autor \citep{meester2008natural},
-una variable random ($X$) se puede explicarse
-como un numero cuyo valor no es conocido en el momento de su planificación.
-Aunque el valor ultimo de esta variable sea desconocido,
-el rango de valores que pueden tomar estas variables viene determinado por una función.
+una variable aleatoria ($X$) puede explicarse
+como un número cuyo valor no es conocido en el momento de su planificación.
+Aunque el valor último de esta variable sea desconocido,
+el rango de valores que pueden tomar estas variables
+viene determinado por una función.
+A esta función se le denomina función de distribución de probabilidad (FDP).
+
 \subsubsection{Distribuciones de probabilidad}\label{sec_prob_dist}
 
 Una distribución de probabilidad es una función estadística
-que determina la probabilidad de que una variable random
+que determina la probabilidad de que una variable aleatoria 
 \citep{simon2002probability},
-obtenga todos los valores posibles que contiene la propia distribución.
-Las distribuciones comúnmente usadas
+obtenga los valores posibles que contiene la propia distribución.
+Las FDP comúnmente usadas
 en los modelos de una DES son las siguientes:
 
-\paragraph{Distribución uniforme.}
+\paragraph{Distribución uniforme.} Esta distribución
+se caracteriza por que los valores tengan
+la misma probabilidad de ser escogidos dentro de un rango.
+Suele ser usada para proporcionar peso
+a los distintos eventos que forman una lista.
+Por ejemplo, para representar la probabilidad de
+que un coche tenga matricula palíndroma,
+se pude emplear una distribución uniforme de $a=0$ y $b=9999$.
+Para cualquier número obtenido inferior a 904,
+la matrícula del coche se determina palíndroma.
+
 \begin{equation}
 	P(x) = \frac{1}{b-a}
 \end{equation}
 
-\paragraph{Distribución normal.}
+\paragraph{Distribución normal.} Aparece continuamente
+en fenómenos naturales, sociales y psicológicos.
+Es la más común de las distribuciones
+y sus parámetros son sencillos e intuitivos.
+La condición que se debe cumplir para poder usar esta FDP,
+es que los datos que forman un conjunto
+deben ser independientes entre si.
+Por ejemplo, la vida útil de un modelo de coche
+puede representarse mediante esta distribución.
+
 \begin{equation}
 	P(x) = \frac{1}{\sqrt{2 \pi \sigma ^{2}}} e^{-\frac{(x-\mu)^{2}}{2\sigma ^{2}}}
 \end{equation}
 
-\paragraph{Distribución lognormal.}
+\paragraph{Distribución lognormal.} Sucede cuando al aplicarle
+un logaritmo a una variable aleatoria,
+esta acaba normalmente distribuida.
+Si la variable aleatoria es $e^X$, $X$
+debe seguir una distribución normal.
+Esta FDP presenta una asimetría positiva,
+lo que la hace idónea para representar procesos
+en los que normalmente su duración se encuentra
+dentro de un intervalo previsto,
+pero que puede llegar a extenderse más de lo normal en el tiempo.
+Por ejemplo, la duración de la reparación de un coche
+pude ser modelada por esta FDP.
+Una reparación puede llegar a extenderse debido a
+imprevistos como la falta de piezas de recambio,
+o problemas inicialmente no detectados.
+
 \begin{equation}
 	P(x) = \frac{1}{\sigma x \sqrt{2 \pi}} e^{-\frac{(ln(x)-\mu)^{2}}{2\sigma ^{2}}}
 \end{equation}
 
-\paragraph{Distribución triangular.}
+\paragraph{Distribución triangular.} Se caracteriza por estar limitada,
+entre un límite inferior $a$, y otro superior $b$,
+siendo su valor más probable la moda $m$.
+A menudo es usada cuando no se dispone de
+suficientes datos de un proceso.
+Por ejemplo, en un taller no se dispone de datos sobre
+lo que un mecánico se demora en cambiar una rueda a un coche,
+pero el propio mecánico, por experiencia,
+sabe aproximadamente el mínimo, el máximo, y la duración típica. 
+
 \begin{equation}
 	P(x;a,m,b) =
 	\begin{cases}
@@ -525,7 +591,16 @@ en los modelos de una DES son las siguientes:
 	\end{cases}
 \end{equation}
 
-\paragraph{Distribución exponencial.}
+\paragraph{Distribución exponencial.} Es la distribución
+de la probabilidad de el tiempo entre eventos de un proceso de Poisson.
+Un proceso de Poisson se caracteriza por que los eventos
+ocurren continuamente y de manera independiente.
+En las DES, se usa para determinar el tiempo entre llegadas
+de las entidades generadas.
+$\lambda$ es el parámetro que marca la frecuencia de las llegadas.
+Por ejemplo, en un taller los clientes llegan uno detrás de otro,
+el periodo entre estas llegadas puede ser modelado mediante esta FDP.
+
 \begin{equation}
 	P(x; \lambda) =
 	\begin{cases}
@@ -534,7 +609,13 @@ en los modelos de una DES son las siguientes:
 	\end{cases}
 \end{equation}
 
-\paragraph{Distribución gamma.}
+\paragraph{Distribución gamma.} Es una distribución de probabilidad de
+2 parámetros, constituyéndose por el parámetro de forma $k$,
+y la escala $\theta$. Debido a sus parámetros,
+es adecuada para el ajuste de distribuciones cuando las variantes
+de distribuciones normales no se ajustan a el conjunto de datos.
+Permite representar una asimetría en la distribución.
+
 \begin{equation}
 	P(x) = x^{k-1} \frac{e^{-x/\theta}}{\theta ^{k}\Gamma (k)} &
 	\text{, siendo:} &
@@ -550,8 +631,10 @@ de las conclusiones obtenidas.
 
 El test de hipótesis involucra formular,
 2 o más hipótesis, que serán puestas a prueba
-mediante el empleo de test estadísticos,
-a las muestras poblacionales obtenidas \citep{martin2022introduction}.
+mediante el empleo de test estadísticos \citep{martin2022introduction}.
+Aplicado a el caso desarrollado en este trabajo,
+se trata de comprobar las hipótesis formuladas
+mediante la comparación de las poblaciones obtenidas en distintos escenarios.
 
 Un formato común en el ámbito de test de hipótesis es el siguiente:
 
@@ -559,9 +642,9 @@ Un formato común en el ámbito de test de hipótesis es el siguiente:
 	\item Hipótesis nula, $H_0$, trata de demostrar que el fenómeno observado es únicamente resultado del azar.
 	\item Hipótesis alternativa, $H_1$, trata de demostrar la hipótesis que se desea probar. Existen 3 tipos:
 		\begin{itemize}
-			\item parámetro de populación $>$ valor hipotetizado.
-			\item parámetro de populación $<$ valor hipotetizado.
-			\item parámetro de populación $\neq$ valor hipotetizado.
+			\item parámetro de población $>$ valor hipotetizado.
+			\item parámetro de población $<$ valor hipotetizado.
+			\item parámetro de población $\neq$ valor hipotetizado.
 		\end{itemize}
 \end{itemize}
 

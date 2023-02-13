@@ -1,5 +1,5 @@
 \appendix
-\section{ANEXO I: CÓDIGO FUENTE}\label{apnd2}
+\section{ANEXO A: CÓDIGO FUENTE}\label{apnd2}
 
 \begin{verbatim}
 # **************************************************************************** #
@@ -215,7 +215,8 @@ class lab_model:
                 self.proc_qced_A.interrutp()
 
     def t_conditioning(self, t_left):
-        t_toshiftend = (G.SIM_DET['SHIFT_DUR'] * G.SIM_DET['SHIFT_N']) - self.env.now % (24*60)
+        t_toshiftend = (G.SIM_DET['SHIFT_DUR'] * G.SIM_DET['SHIFT_N']) \
+            - self.env.now % (24*60)
         if G.SIM_DET['SHIFT_N'] == 3:
             return t_left
         elif t_left > t_toshiftend:
@@ -458,7 +459,7 @@ print(data.stat_calc(df))
 \end{verbatim}
 \newpage
 
-\section{ANEXO II: DIAGRAMAS DE FLUJO}\label{apnd3}
+\section{ANEXO B: DIAGRAMAS DE FLUJO}\label{apnd3}
 
 \begin{figure}[H]
 	\begin{center}
@@ -522,3 +523,25 @@ print(data.stat_calc(df))
 	\end{center}
 	\caption{Modelo del subproceso de ensayo de la cubierta}
 \end{figure}
+
+\section{ANEXO C: TABLAS}\label{apnd4}
+
+\begin{table}[H]
+	\centering
+	\caption{Carga maxima de neumático segun LI. ETRTO 2022}
+	\input{fig/apnd_tbl_li.tex}
+\end{table}
+
+\section{ANEXO D: ESPECIFICACIONES DE\\ MAQUINA}\label{apnd5}
+
+\begin{table}[H]
+	\centering
+	\caption{Especificaciones de la maquina \textit{Endurance}}
+	\input{fig/apnd_qced_mach_specs}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{Especificaciones de la maquina \textit{Rolling Resistance}}
+	\input{fig/apnd_rr_mach_specs}
+\end{table}
