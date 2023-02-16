@@ -20,8 +20,8 @@
 \node (pro1) [process, below of=start] {Requerir técnico};
 \node (pro2) [process, below of=pro1] {Liberar técnico};
 \node (pro3) [process, below of=pro2] {Transcurrir t};
-\node (dec) [decision, below of=pro3, aspect=2] {Fuera de oficina?};
-\node (pro4) [process, below of=dec] {Transcurrir t hasta incio de jornada};
+\node (dec) [decision, below of=pro3, aspect=2] {¿Fuera de oficina?};
+\node (pro4) [process, below of=dec, yshift=-1cm] {Transcurrir t hasta incio de jornada};
 
 \draw [arrow] (pro1) -- (pro2);
 \draw [arrow] (pro2) -- (pro3);

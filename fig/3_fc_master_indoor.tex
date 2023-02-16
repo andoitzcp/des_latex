@@ -14,20 +14,20 @@
 
 \begin{document}
 
-\begin{tikzpicture}[node distance=2cm, auto]
+\begin{tikzpicture}[node distance=1.5cm, auto]
 
 \node (start) [startstop] {Proceso maestro Endurance};
-\node (dec1) [decision, below of=start, aspect=2] {Lago de bufer > 1};
-\node (pro1) [process, below of=dec1] {\shortstack{Extraer 2 objetos\\del buffer (a, b)}};
+\node (dec1) [decision, below of=start, aspect=2, xshift=-4cm] {Lago de bufer $>$ 1};
+\node (pro1) [process, right of=dec1, xshift=4cm] {\shortstack{Extraer 2 objetos\\del buffer}};
 \node (pro2) [process, below of=pro1] {Requerir llanta};
-\node (pro3) [process, below of=pro2] {\shortstack{Llamar a \\enllantado(a, b)}};
-\node (pro4) [process, below of=pro3] {\shortstack{Llamar a \\enllantado(a, b)}};
+\node (pro3) [process, below of=pro2] {\shortstack{Llamar a \\enllantado}};
+\node (pro4) [process, below of=pro3] {\shortstack{Llamar a \\enllantado}};
 \node (pro5) [process, below of=pro4] {Requerir maquina endurance};
-\node (pro6) [process, below of=pro5] {Llamar a montado(a)};
-\node (pro7) [process, below of=pro6] {Llamar a montado(b)};
-\node (pro8) [process, below of=pro7] {\shortstack{Llamar a \\acondicionado(a, b)}};
-\node (pro9) [process, below of=pro8] {\shortstack{Llamar a \\medir presion(a, b)}};
-\node (pro10) [process, below of=pro9] {\shortstack{Llamar a \\Ensayo endurance\\(a, b)}};
+\node (pro6) [process, below of=pro5] {Llamar a montado};
+\node (pro7) [process, below of=pro6] {Llamar a montado};
+\node (pro8) [process, below of=pro7] {\shortstack{Llamar a \\acondicionado}};
+\node (pro9) [process, below of=pro8] {\shortstack{Llamar a \\medir presion}};
+\node (pro10) [process, below of=pro9] {\shortstack{Llamar a \\Ensayo Endurance}};
 \node (pro11) [process, below of=pro10] {\shortstack{Liberar \\Llanta y maquina}};
 
 \draw [arrow] (dec1) -- (pro1);

@@ -18,14 +18,14 @@
 \node (starta) [startstop, xshift=-3cm] {Generador A};
 \node (startb) [startstop, , xshift=3cm] {Generador B};
 \node (pro1) [process, below of=starta, xshift=3cm] {Conducir (largo)};
-\node (dec1) [decision, below of=pro1, aspect=2] {Deposito vacio?};
+\node (dec1) [decision, below of=pro1, aspect=2] {¿Depósito vacio?};
 \node (pro2) [process, right of=dec1, xshift=3cm] {Repostar};
 \node (pro3) [process, below of=dec1] {Conducir (corto)};
-\node (dec2) [decision, below of=pro3, aspect=2] {Parking lleno?};
+\node (dec2) [decision, below of=pro3, aspect=2] {¿Parking lleno?};
 \node (pro4) [process, right of=dec2, xshift=3cm] {Buscar aparcamiento};
 \node (pro5) [process, below of=dec2] {Aparcar};
 \node (pro6) [process, below of=pro5] {Conducir (corto)};
-\node (dec3) [decision, below of=pro6, aspect=2] {Deposito vacio?};
+\node (dec3) [decision, below of=pro6, aspect=2] {¿Depósito vacio?};
 \node (pro7) [process, right of=dec3, xshift=3cm] {Repostar};
 \node (pro8) [process, below of=dec3] {Conducir (largo)};
 \node (stop) [startstop, below of=pro8] {Salida del sistema};

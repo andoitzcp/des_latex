@@ -1,11 +1,14 @@
 \documentclass[12pt]{article}
 \usepackage{mystyle}
 \title{A Modular Latex Template}
-\author{Eitan Lees}
-\date{Summer 2019}
+\author{Andoitz Campo}
+\date{16 de Febrero de 2023}
 
 \begin{document}
 
+	\includepdf[pages=-]{portada_TFG-1.pdf}
+
+	\newpage
     \tableofcontents
 
 	\newpage
@@ -16,10 +19,14 @@
     \input{tex/sec_conclusiones}
 
 	\newpage
-	\input{tex/apnd_code}
+	\input{tex/glosario}
 
 	\newpage
 	\nocite{*}
 	\bibliographystyle{apalike-es}
 	\bibliography{mybibliography}
+
+	\newpage
+	\input{tex/apnd_code}
+
 \end{document}

@@ -1,0 +1,40 @@
+\documentclass[varwidth=\maxdimen]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{tabular}{ l c }
+	\toprule
+	Tipo & Variable & \\
+	\midrule
+	Identificativo	& & Ejecución \\
+					& & ID \\
+					& & Ensayo \\
+	Trazativo		& Generación de la entidad & \\ 
+	[min]			& Inicio	& Enllantado \\ 
+					& 			& Montado \\ 
+					& 			& Acondiconado \\ 
+					& 			& Ajustado de presión \\ 
+					& 			& Ensayo \\ 
+					& Fín		& Enllantado \\ 
+					& 			& Montado \\ 
+					& 			& Acondiconado \\ 
+					& 			& Ajustado de presión \\ 
+					& 			& Ensayo \\ 
+	Cuantitativo	& Tiempo de	& Enllantado\\ 
+	[min]			& espera	& Montado \\ 
+					& 			& Acondiconado \\ 
+					& 			& Ajustado de presión \\ 
+					& 			& Ensayo \\ 
+					& Duración	& Enllantado \\ 
+					& 			& Montado \\ 
+					& 			& Acondiconado \\ 
+					& 			& Ajustado de presión \\ 
+					& 			& Ensayo \\ 
+							
+	\bottomrule
+\end{tabular}
+
+\end{document}

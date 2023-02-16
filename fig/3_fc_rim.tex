@@ -19,7 +19,7 @@
 \node (start) [startstop] {\shortstack{Duracion enllantado = t}};
 \node (dec1) [decision, below of=start] {$t<0$};
 \node (pro1) [process, below of=dec1] {\shortstack{Requerir \\Tecnico y Butler}};
-\node (dec2) [decision, below of=pro1, aspect=2] {Interrupción?};
+\node (dec2) [decision, below of=pro1, aspect=2] {¿Interrupción?};
 \node (pro5) [process, right of=dec2, xshift=2cm] {$t -= t_{transcurrido}$};
 \node (pro2) [process, below of=dec2] {Transcurrir t};
 \node (pro3) [process, below of=pro2] {$t = 0$};

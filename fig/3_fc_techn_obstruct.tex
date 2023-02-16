@@ -16,7 +16,7 @@
 \begin{tikzpicture}[node distance=2cm, auto]
 
 \node (start) [startstop] {Duración del turno = X};
-\node (dec) [decision, below of=start] {Es viernes?};
+\node (dec) [decision, below of=start] {¿Es viernes?};
 \node (pro1) [process, below of=dec, yshift=-0.5cm] {Trascurrir X horas};
 \node (pro2) [process, below of=pro1] {Obstruir técnico 24-X horas};
 \node (pro3) [process, right of=dec, xshift=2cm] {Obstruir técnico 48 horas};

@@ -1,16 +1,3 @@
-\setlength{\parskip}{12pt}
-\setlength{\parindent}{0cm}
-\renewcommand{\arraystretch}{1.2}
-\setcounter{secnumdepth}{4}
-
-\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
-\begin{document}
-
-
-
-\renewcommand{\listtablename}{Índice de tablas}
-\renewcommand{\tablename}{Tabla}
-
 \definecolor{light-gray}{gray}{0.87}  
 
 \begin{titlepage}
@@ -20,7 +7,7 @@
         \begin{center}
     
 
-            \includegraphics[width=\paperwidth]{graphics/LogoEHU.PNG}
+            \includegraphics[width=\paperwidth]{fig/LogoEHU.PNG}
         \end{center}
     \end{minipage}
 
@@ -30,30 +17,30 @@
 \noindent\fcolorbox {light-gray}{white}{
 
     \parbox{\paperwidth}{
-     \begin{center}
-     \large Gradu amaierako lana /Trabajo fin de grado
-    \\
+		\begin{center}
+     		\large Gradu amaierako lana /Trabajo fin de grado \\
              \large Ingenieritza Kimiko gradua/ Grado en Ingeniería Química
 
-\end{center}
+		\end{center}
     }
-    }
-
+}
 
 \vspace{0.8cm}
 
-\noindent\hspace*{-2.5cm}%
+\noindent\hspace*{-3.5cm}%
 \colorbox{light-gray}{\begin{minipage}{\paperwidth}%
 
     \vspace{1cm}
 
     \color{RoyalBlue}
-    \centering\Large\textbf{ Lanaren izenrua / Título del trabajo}
-    \\
-    \centering\textmd{ Lanaren azpitituloa / Subtitulo del trabajo}
+	\begin{center}
+    \centering\Large\textbf{ Simulación de Eventos Discretos (DES)\\
+	como método para la optimización de recursos \\
+	en un laboratorio de evaluación de neumáticos}
 
 
-    \vspace{6cm}\mbox{}
+	\end{center}
+    \vspace{1.0cm}\mbox{}
   \end{minipage}
 }
 
@@ -65,8 +52,6 @@ Andoitz Campo Pérez
 Zuzendariak/Directores/as:
 \\
 Asier Aranzabal Maiztegi
-\\
-XXX XXX                      
 \\
 \end{flushright}
 
@@ -91,7 +76,7 @@ XXX XXX
         \parbox{\paperwidth}{
             \begin{center}
     
-                 Leioa, 2021eko XXXren XXa / Leioa, XX de XXX de 2021
+                 Leioa, 2023eko Otsailaren 16a / Leioa, 16 de Febrero de 2023
 
             \end{center}
         }
@@ -99,24 +84,3 @@ XXX XXX
 }
 
 \end{titlepage}
-
-\tableofcontents
-
-\newpage 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Hemendik aurrera hasi lana idazten%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{tex/sec_intro/sec_intro}
-\input{tex/sec_mteorico/sec_mteorico}
-\input{tex/sec_mteorico/sec_resultados}
-
-\section{METODOLOGÍA}
-\section{DESARROLLO}
-\section{CONCLUSIONES}
-
-\newpage 
-
-\bibliographystyle{elsarticle-harv}
-\bibliography{mybibfile}
-\end{document}

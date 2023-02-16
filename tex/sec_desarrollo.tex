@@ -6,52 +6,62 @@
 %    By: acampo-p <acampo-p@student.42urduliz.com>  +#+  +:+       +#+         %
 %                                                 +#+#+#+#+#+   +#+            %
 %    Created: 2022/12/07 17:42:28 by acampo-p          #+#    #+#              %
-%    Updated: 2023/02/13 04:11:05 by acampo-p         ###   ########.fr        %
+%    Updated: 2023/02/16 03:26:16 by acampo-p         ###   ########.fr        %
 %                                                                              %
 % **************************************************************************** %
 
 \section{DESARROLLO}
 
-\subsection{FORMULACIÓN DEL PROBLEMA, \newline ESTABLECIMIENTO DE OBJETIVOS Y PLAN \newline GENERAL}
-
-Esta etapa corresponde a la sección~\ref{sec:intro} de introducción.
-
 \subsection{CONCEPTUALIZACIÓN DEL MODELO}
 
-Como se menciona en la sección~\ref{sec:modelconcept}, a la hora de diseñar el modelo
+Como se menciona en la sección~\ref{sec:modelconcept},
+a la hora de diseñar el modelo
 es conveniente comenzar desde el planteamiento de los objetivos,
-e ir adquiriendo detalle hasta llegar a definir los \textit{inputs}.
+e ir adquiriendo detalle hasta llegar a definir las variables de entrada.
 
 Una vez han quedado los objetivos descritos,
-se ha procedido ha determinar las cuestiones clave para dar con una solución.
-La siguiente lista de preguntas ha sido ha sido formulada.
+se ha procedido a determinar las cuestiones clave para dar con una solución.
+La siguiente lista de preguntas ha sido ha sido formulada:
 
 \begin{itemize}
-	\item ¿Que sucedería si el tiempo disponible para el montaje de las maquinas fuese mayor? 
-	\item ¿Cual sería el efecto de que dos técnicos trabajasen simultáneamente en los ensayos?
-	\item ¿Como afectaría la instalación de maquinas Endurance
+	\item ¿Qué sucedería si el tiempo disponible para el montaje de las máquinas fuese mayor? 
+	\item ¿Cuál sería el efecto de que dos técnicos trabajasen simultáneamente en los ensayos?
+	\item ¿Cómo afectaría la instalación de máquinas \textit{Endurance}
 		adicionales a la cantidad de ensayos realizados?
 \end{itemize}
 
-Para responder a las preguntas planteadas,
-se ha programado la simulación de tal manera que devuelva una tabla
-conteniendo los tiempos de inicio y fin de cada proceso.
+Para responder a las preguntas planteadas, y facilitar el proceso de VV.
+se ha programado la simulación de tal manera que devuelva
+los contenidos de la Tabla~\ref{tab:3_tbl_output}.
+Cada línea en la columna de variable corresponden
+a un encabezado de la tabla que retorna la simulación.
+Es decir, las variables listadas en la Tabla~\ref{tab:3_tbl_output},
+son las variables de retorno de la simulación.
+
+\begin{table}[H]
+	\centering
+	\caption{Definición de las variables de salida de la simulación.}
+	\input{fig/3_tbl_output}
+	\label{tab:3_tbl_output}
+\end{table}
+
 A través de análisis de los datos indexados,
 se han podido obtener estadísticas como:
-numero de ensayos totales realizados por tipo de test,
-o el tiempo total de maquina en funcionamiento
+número de ensayos totales realizados por tipo de test,
+o el tiempo total de máquina en funcionamiento
 por cada ejecución de la simulación.
 
-El modelo a reproducir para obtener los datos descritos	en el anterior párrafo,
+El modelo a reproducir para obtener los datos descritos
+en la Tabla~\ref{tab:3_tbl_output},
 ha sido deliberadamente diseñado de manera simple.
 Esto ha facilitado la obtención de datos representativos
 y su posterior análisis.
-Se ha tomado parte de el diagrama de la Figura~\ref{fig:2_fc_lep_diagram},
+Se ha tomado parte del diagrama de la Figura~\ref{fig:2_fc_lep_diagram},
 Excluyendo ciertos procesos irrelevantes
 para las preguntas previamente formuladas.
 Estos diagramas se encuentran en el Anexo~\ref{apnd3}.
 
-Los \textit{inputs} necesarios para el funcionamiento del modelo
+Las variables de entrada necesarias para el funcionamiento del modelo
 se han recopilado en las Tablas~\ref{tab:3_tbl_sim_det},
 \ref{tab:3_tbl_rsrc},
 \ref{tab:3_tbl_indoor_det}
@@ -98,7 +108,8 @@ A este rango, se le aplicaría un
 ajuste de distribución de probabilidad que se usaría en la DES.
 Al trabajar con un laboratorio ficticio,
 no es posible la recopilación de datos dentro de un laboratorio.
-No obstante, el proyecto se ha planteado en base a estimaciones fundamentadas.
+No obstante, el proyecto se ha planteado basándose en
+estimaciones fundamentadas.
 Se ha tratado de representar cada proceso mediante
 distribuciones acordes a sus propiedades,
 descritas en la sección~\ref{sec_prob_dist}.
@@ -113,10 +124,11 @@ se ha optado por representarlos mediante una distribución triangular.
 Como se indica en la sección~\ref{sec_prob_dist},
 las distribuciones triangulares son adecuadas para aquellos procesos en los que no se disponga de mucha información.
 
-Finalmente en el caso de los ensayos \textit{Endurance},
-se ha estimado su duración media en base a los estándares de calidad
+Finalmente, en el caso de los ensayos \textit{Endurance},
+se ha estimado su duración media basándose en los estándares de calidad
 especificados en la norma UNECE-54.
-En el caso de los ensayos \textit{Rolling Resistance} se ha estimado en base al estándar SAE J1269.
+En el caso de los ensayos \textit{Rolling Resistance}
+se ha estimado según la información recogida en el estándar SAE J1269.
 La duración de estos ensayos,
 se ha tratado de representar mediante distribuciones normales,
 debido a la sencillez y versatilidad de las mismas.
@@ -124,13 +136,14 @@ debido a la sencillez y versatilidad de las mismas.
 \subsection{TRADUCCIÓN DEL MODELO}
 
 El modelo traducido, que se encuentra en el Anexo~\ref{apnd3},
-puede dividirse en 3 procesos generales:
+puede dividirse en 3 procesos generales y varios subprocesos:
 
 \paragraph{La generación de entidades}
 se encarga de crear instancias de las cubiertas que son alimentadas
 a los procesos maestros de cada ensayo.
 Son 2 los generadores que posee la simulación,
-uno para los ensayos Endurance, y otro para los ensayos Rolling.
+uno para los ensayos \textit{Endurance},
+y otro para los ensayos \textit{Rolling}.
 
 \paragraph{Los procesos maestros}
 son los responsables de ejecutar los subprocesos
@@ -141,7 +154,7 @@ uno para cada tipo de ensayo.
 
 \paragraph{Los subprocesos}
 son las subrutinas llamadas por los procesos maestros.
-Crear módulos para cada tarea mejora la legibilidad del código.
+Crear módulos para cada actividad mejora la legibilidad del código.
 
 \paragraph{La obstrucción del técnico}
 es el proceso que simula el inicio y el fin de una jornada laboral,
@@ -151,8 +164,11 @@ y hace transcurrir el tiempo, incluyendo los fines de semana.
 
 El proceso de verificación se ha realizado a lo largo de la simulación.
 Se ha comprobado que los pasos se ejecutan en el orden esperado,
-y se ha revisado la lógica de los algoritmos propuestos.
+mediante los datos de trazabilidad descritos en la Tabla~\ref{tab:3_tbl_output}.
+Además de esto, se ha revisado la lógica de los algoritmos propuestos
+en el Anexo~\ref{apnd3}.
 
 Respecto al proceso de validación,
-se ha tomado como referencia el recuento ensayos realizados durante un año,
-y el tiempo de funcionamiento de maquina, y se ha comprobado que fueran similares. 
+se ha tomado como referencia el recuento ensayos realizados durante un año
+y el tiempo de funcionamiento de máquina.
+Estos dos datos se han comparado resultando similares.

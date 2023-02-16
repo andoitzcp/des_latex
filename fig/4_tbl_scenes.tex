@@ -1,0 +1,28 @@
+\documentclass[varwidth=\maxdimen]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\begin{document}
+
+\begin{tabularx}{\textwidth}{ l l X }
+	\toprule
+	ID & Variable alterada	& Descripción \\
+	\midrule
+	E0	& Ninguna	& Escenario original\\
+	\addlinespace
+	T2	& Turnos	& 1 técnico añadido trabajando a relevos. 16 horas de técnico disponible diariamente de lunes a viernes. \\
+	T3	&			& 2 técnicos añadidos trabajando a relevos. 24 horas diarias de técnico disponible de lunes a viernes. \\
+	T4	&			& 3 técnicos añadidos trabajando a relevos. Técnico disponible 24 horas 365 días al año. \\
+	\addlinespace
+	W2	& Técnicos	& 1 técnico añadido que trabaja simultáneamente al existente. La función de este técnico es dar soporte al primero \\
+	\addlinespace
+	M1	& Máquinas \textit{Endurance} & 1 sola máquina \textit{Endurance} instalada en el laboratorio. \\
+	M2	&  			& 2 máquinas \textit{Endurance} instaladas en el laboratorio. \\
+	M3	& 			& 3 máquinas \textit{Endurance} instaladas en el laboratorio. \\
+	M5	& 			& 5 máquinas \textit{Endurance} instaladas en el laboratorio. \\
+	M10	& 			& 10 máquinas \textit{Endurance} instaladas en el laboratorio. \\
+	\bottomrule
+\end{tabularx}
+\end{document}

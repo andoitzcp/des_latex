@@ -20,13 +20,13 @@
 \node (pro2a) [process, below of=pro1, xshift=-3cm] {Conceptualización del modelo};
 \node (pro2b) [process, below of=pro1, xshift=3cm] {Recopilación de datos};
 \node (pro3) [process, below of=pro2a, xshift=3cm] {Traducción del modelo};
-\node (dec1) [decision, below of=pro3,aspect=2, yshift=0cm] {Verificado?};
-\node (dec2) [decision, below of=dec1,aspect=2, yshift=0cm] {Validado?};
+\node (dec1) [decision, below of=pro3,aspect=2, yshift=0cm] {¿Verificado?};
+\node (dec2) [decision, below of=dec1,aspect=2, yshift=0cm] {¿Validado?};
 \node (pro4) [process, below of=dec2, yshift=-0.25] {Diseño experimental};
 \node (pro5) [process, below of=pro4] {Ejecuciones de producción y análisis};
-\node (dec3) [decision, below of=pro5, aspect=2, yshift=-0.5cm] {Más ejecuciones?};
-\node (pro6) [process, below of=dec3, yshift=0cm] {Documentación y comunicación};
-\node (stop) [startstop, below of=pro6] {Implementación};
+\node (dec3) [decision, below of=pro5, aspect=3, yshift=0cm] {¿Más ejecuciones?};
+\node (pro6) [process, below of=dec3, yshift=-0.2cm] {Documentación y comunicación};
+\node (stop) [startstop, below of=pro6, yshift=0.2cm] {Implementación};
 
 \coordinate [below of=pro1, yshift=1cm] (ur1);
 \coordinate [left of=pro2a] (ur2a);
